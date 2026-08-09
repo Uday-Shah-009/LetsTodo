@@ -39,7 +39,6 @@ const SubTaskTimeline = ({ taskId }) => {
   const getPosition = (startDate, endDate) => {
     const start = startOfDay(parseISO(startDate));
     const end = endOfDay(parseISO(endDate));
-
     const offset =
       differenceInCalendarDays(
         start,

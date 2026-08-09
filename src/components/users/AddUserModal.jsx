@@ -24,9 +24,11 @@ export default function AddUserModal({ closeModal }) {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-1">
+            <label htmlFor="user-modal-username" className="block text-xs font-medium text-gray-700 dark:text-gray-300">Username *</label>
             <input
+              id="user-modal-username"
               type="text"
-              placeholder="username"
+              placeholder="Username"
               {...register("username", {
                 required: "Username is required",
                 minLength: { value: 3, message: "Minimum 3 characters" },
@@ -36,7 +38,7 @@ export default function AddUserModal({ closeModal }) {
                   message: "Only letters, numbers and underscores",
                 },
               })}
-              className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-transparent"
+              className="w-full p-2.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.username && (
               <p className="text-xs text-red-500">{errors.username.message}</p>
@@ -44,9 +46,11 @@ export default function AddUserModal({ closeModal }) {
           </div>
 
           <div className="space-y-1">
+            <label htmlFor="user-modal-email" className="block text-xs font-medium text-gray-700 dark:text-gray-300">Email Address *</label>
             <input
+              id="user-modal-email"
               type="email"
-              placeholder="Email"
+              placeholder="Email address"
               {...register("email", {
                 required: "Email is required",
                 pattern: {
@@ -54,7 +58,7 @@ export default function AddUserModal({ closeModal }) {
                   message: "Enter a valid email address",
                 },
               })}
-              className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-transparent"
+              className="w-full p-2.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.email && (
               <p className="text-xs text-red-500">{errors.email.message}</p>
@@ -62,7 +66,9 @@ export default function AddUserModal({ closeModal }) {
           </div>
 
           <div className="space-y-1">
+            <label htmlFor="user-modal-password" className="block text-xs font-medium text-gray-700 dark:text-gray-300">Password *</label>
             <input
+              id="user-modal-password"
               type="password"
               placeholder="Password"
               {...register("password", {
@@ -73,7 +79,7 @@ export default function AddUserModal({ closeModal }) {
                   message: "Must include at least one letter and one number",
                 },
               })}
-              className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-transparent"
+              className="w-full p-2.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.password && (
               <p className="text-xs text-red-500">{errors.password.message}</p>

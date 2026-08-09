@@ -38,8 +38,8 @@ export const getTaskProgress = async (task_id) => {
   return res.data;
 };
 
-export const GetTaskCreationRequests = async () => {
-  const res = await axiosInstance.get("task-creation-requests");
+export const GetTaskCreationRequests = async (params) => {
+  const res = await axiosInstance.get("task-creation-requests", { params });
   return res.data;
 };
 
@@ -66,11 +66,12 @@ export const ApproveTask = async (payload) => {
 
 export const TaskTimeline = async (task_id) => {
   const res = await axiosInstance.get(`/tasks/${task_id}/timeline`);
+  console.log(res.data);
   return res.data;
 };
 
-export const TaskRequestByuser = async () => {
-  const res = await axiosInstance.get("/task-creation-requests/my");
+export const TaskRequestByuser = async (params) => {
+  const res = await axiosInstance.get("/task-creation-requests/my", { params });
   return res.data;
 };
 
@@ -87,5 +88,52 @@ export const getTaskActivities = async (taskId, page, pageSize) => {
       page_size: pageSize,
     },
   });
+  return res.data;
+};
+
+export const AddSubtasksToTask = async (payload) => {
+  const res = await axiosInstance.post("subtasks", payload);
+  return res.data;
+};
+
+export const ReviseTask = async ({ taskId, bumpType }) => {
+  const res = await axiosInstance.post(`/tasks/${taskId}/revise`, {
+    bump_type: bumpType,
+  });
+  return res.data;
+};
+
+export const subTaskRequestByuser = async (params) => {
+  const res = await axiosInstance.get("/subtask-update-requests/my", { params });
+  return res.data;
+};
+
+export const subTaskUpdateAll = async(params) => {
+  const res = await axiosInstance.get("/subtask-update-requests",{params})
+  return res.data;
+}
+
+export const ApproveSubTaskRequest = async ({
+  requestId,
+  weightage_priority,
+  subtask_priority,
+  comment,
+}) => {
+  const res = await axiosInstance.put(
+    `/subtask-update-requests/${requestId}/approve`,
+    {
+      weightage_priority: Number(weightage_priority),
+      subtask_priority,
+      comment,
+    }
+  );
+  return res.data;
+};
+
+export const RejectSubTaskRequest = async ({ requestId, comment }) => {
+  const res = await axiosInstance.put(
+    `/subtask-update-requests/${requestId}/reject`,
+    { comment }
+  );
   return res.data;
 };

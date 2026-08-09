@@ -15,6 +15,7 @@ import { checkUserRole } from "./isAdmin";
 import TaskRequestsPage from "../../pages/admin/TaskCreationRequests";
 import AddDepartmentPage from "../../pages/admin/DepartmentManager";
 import ManageUserDepartment from "../../components/users/ManageUserDepartments";
+import CategoryManager from "../../pages/admin/CategoryManager";
 
 /* Admin Parent Route */
 
@@ -135,6 +136,16 @@ export const adminUserDepartmentManager = createRoute({
   },
 });
 
+export const adminCategoryManager = createRoute({
+  getParentRoute: () => adminLayoutRoute,
+  path: "/categories",
+  component: CategoryManager,
+  beforeLoad: () => {
+    requireAuth();
+    checkUserRole();
+  },
+});
+
 /* Export Admin Routes */
 
 export const adminRoutes = adminLayoutRoute.addChildren([
@@ -147,4 +158,5 @@ export const adminRoutes = adminLayoutRoute.addChildren([
   adminSettingsRoute,
   adminTaskRequests,
   adminDepartmentManager,
+  adminCategoryManager,
 ]);

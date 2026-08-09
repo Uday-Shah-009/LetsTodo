@@ -1,77 +1,111 @@
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "../../store/authStore";
+import ConfirmationModal from "../ConfirmationModal";
+import {
+  LayoutDashboard,
+  ClipboardList,
+  GitPullRequest,
+  CalendarDays,
+  Users,
+  Building2,
+  FolderTree,
+  Settings,
+  LogOut,
+} from "lucide-react";
 
 export default function AdminSidebar({ sidebarOpen, setSidebarOpen }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const logoutHandle = () => {
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
+  const handleConfirmLogout = () => {
     const { logout } = useAuthStore.getState();
     logout();
+    setShowLogoutConfirm(false);
     navigate({ to: "/" });
   };
+
   const navItems = [
-    { name: "Dashboard", path: "/admin/dashboard" },
-    { name: "Tasks", path: "/admin/tasks" },
-    { name: "Task Requests", path: "/admin/task-requests" },
-    { name: "Timeline", path: "/admin/timeline" },
-    { name: "Users", path: "/admin/users" },
-    { name: "Departments", path: "/admin/departments" },
-    { name: "Settings", path: "/admin/settings" },
+    { name: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
+    { name: "Tasks", path: "/admin/tasks", icon: ClipboardList },
+    { name: "Task Requests", path: "/admin/task-requests", icon: GitPullRequest },
+    { name: "Timeline", path: "/admin/timeline", icon: CalendarDays },
+    { name: "Users", path: "/admin/users", icon: Users },
+    { name: "Departments", path: "/admin/departments", icon: Building2 },
+    { name: "Categories", path: "/admin/categories", icon: FolderTree },
+    { name: "Settings", path: "/admin/settings", icon: Settings },
   ];
 
   return (
     <>
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/40 lg:hidden"
+          className="fixed inset-0 bg-black/50 backdrop-blur-xs lg:hidden z-40"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       <aside
-        className={`fixed lg:static z-40 w-64 h-full bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 transform transition-transform flex flex-col
+        className={`fixed lg:static z-40 w-64 h-full bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 transform transition-transform duration-200 flex flex-col
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0`}
       >
-        {/* Wrapper */}
-        <div className="flex flex-col h-full">
-          {/* Header */}
-          <div className="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-800">
-            <h2 className="text-xl font-semibold">LETS TODO</h2>
-          </div>
-
-          {/* Navigation */}
-          <nav className="p-4 space-y-2 flex-1">
-            {navItems.map((item) => {
-              const active = location.pathname === item.path;
-
-              return (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  onClick={() => setSidebarOpen(false)}
-                  className={`block px-4 py-2 rounded-lg transition ${
-                    active
-                      ? "bg-blue-500 text-white"
-                      : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              );
-            })}
-          </nav>
-
-          <div
-            onClick={() => logoutHandle()}
-            className="p-4 border-t border-gray-200 dark:border-gray-800"
-          >
-            <button className="w-full px-4 py-2 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition">
-              Logout
-            </button>
+        {/* Header */}
+        <div className="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-800">
+          <div className="flex items-center gap-2">
+            <span className="text-xl font-extrabold italic text-blue-500">LETS</span>
+            <span className="text-xl font-bold text-gray-900 dark:text-white">TODO</span>
           </div>
         </div>
+
+        {/* Navigation */}
+        <nav className="p-4 space-y-1 flex-1 overflow-y-auto">
+          {navItems.map((item) => {
+            const active = location.pathname === item.path;
+            const Icon = item.icon;
+
+            return (
+              <Link
+                key={item.name}
+                to={item.path}
+                onClick={() => setSidebarOpen(false)}
+                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-colors ${
+                  active
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
+                }`}
+              >
+                <Icon className={`w-4 h-4 ${active ? "text-white" : "text-gray-500 dark:text-gray-400"}`} />
+                <span>{item.name}</span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Logout */}
+        <div className="p-4 border-t border-gray-200 dark:border-gray-800">
+          <button
+            type="button"
+            onClick={() => setShowLogoutConfirm(true)}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 hover:bg-red-600 hover:text-white dark:hover:bg-red-600 dark:hover:text-white transition font-medium text-sm cursor-pointer"
+          >
+            <LogOut className="w-4 h-4" />
+            Logout
+          </button>
+        </div>
       </aside>
+
+      <ConfirmationModal
+        isOpen={showLogoutConfirm}
+        onClose={() => setShowLogoutConfirm(false)}
+        onConfirm={handleConfirmLogout}
+        title="Confirm Logout"
+        message="Are you sure you want to log out of your session?"
+        confirmText="Log Out"
+        cancelText="Cancel"
+        variant="warning"
+      />
     </>
   );
 }

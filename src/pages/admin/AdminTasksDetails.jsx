@@ -7,14 +7,24 @@ import "react-circular-progressbar/dist/styles.css";
 import SubTaskTimeline from "../../components/tasks/SubTaskTimeline";
 import { getStatusClasses } from "../../utils/statusColors";
 import AllActivities from "../../components/tasks/AllActivities";
+import { useState } from "react";
+import ReviseTaskModal from "../../components/tasks/ReviseTaskModal";
 
 export default function TaskDetails() {
   const { taskId } = adminTaskDetailsRoute.useParams();
   const navigate = useNavigate();
   const user = useUser();
+  const [isReviseModalOpen, setIsReviseModalOpen] = useState(false);
   const backPath = user?.role === "user" ? "/tasks" : "/admin/tasks";
   const { data: taskData, isPending: TaskisPending } = useGetTaskById(taskId);
   const { data: progressData } = useGetProgress(taskId);
+
+  const handleRevised = (createdTask) => {
+    if (createdTask?.id) {
+      navigate({ to: `/admin/tasks/${createdTask.id}` });
+    }
+  };
+
   if (TaskisPending)
     return <div className="text-[18px]">Loading Task {taskId}</div>;
   return (
@@ -59,6 +69,32 @@ export default function TaskDetails() {
         </div>
       </div>
 
+      <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Task Actions</h2>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              Revise is available for completed tasks and creates a new version.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsReviseModalOpen(true)}
+            disabled={taskData.status !== "complete"}
+            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+          >
+            Revise Task
+          </button>
+        </div>
+
+        {taskData.status !== "complete" && (
+          <p className="mt-3 text-sm text-amber-600 dark:text-amber-400">
+            Complete the task before creating a new version.
+          </p>
+        )}
+      </div>
+
       <div className="space-y-4">
         <h2 className="text-lg font-semibold">Subtasks</h2>
 
@@ -89,21 +125,37 @@ export default function TaskDetails() {
         </div>
       </div>
 
-      <div className="w-24 h-24">
-        <CircularProgressbar
-          value={progressData?.progress_percentage || 0}
-          text={`${progressData?.progress_percentage || 0}%`}
-          styles={buildStyles({
-            pathColor: "#22c55e",
-            trailColor: "#e5e7eb",
-          })}
-        />
+      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Overall Task Progress</h2>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            Calculated automatically based on subtask completion statuses
+          </p>
+        </div>
+        <div className="w-24 h-24 shrink-0">
+          <CircularProgressbar
+            value={progressData?.progress_percentage || 0}
+            text={`${progressData?.progress_percentage || 0}%`}
+            styles={buildStyles({
+              pathColor: "#22c55e",
+              trailColor: "#e5e7eb",
+              textColor: "#22c55e",
+              textSize: "24px",
+            })}
+          />
+        </div>
       </div>
       <div className="space-y-4">
-        <h2 className="text-lg font-semibold">Subtask Performance Timeline</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Subtask Performance Timeline</h2>
         <SubTaskTimeline taskId={taskId} />
       </div>
       <AllActivities taskId={taskId} />
+      <ReviseTaskModal
+        open={isReviseModalOpen}
+        onClose={() => setIsReviseModalOpen(false)}
+        task={taskData}
+        onRevised={handleRevised}
+      />
     </div>
   );
 }

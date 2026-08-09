@@ -1,7 +1,10 @@
 import { useGetAllTasks } from "../../app/Queries/Tasks.query";
 import TaskTable from "../../components/tasks/TaskTable";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import ErrorState from "../../components/ui/ErrorState";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { Plus } from "lucide-react";
 
 export default function AdminTasks() {
   const navigate = useNavigate();
@@ -9,14 +12,14 @@ export default function AdminTasks() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  const { data, isPending, error } = useGetAllTasks({
+  const { data, isPending, error, refetch } = useGetAllTasks({
     status: selectedStatus,
     page,
     pageSize,
   });
 
-  if (isPending) return <div>Loading Tasks...</div>;
-  if (error) return <div>Something went wrong</div>;
+  if (isPending) return <LoadingSpinner message="Loading system tasks..." fullPage />;
+  if (error) return <ErrorState title="Failed to load tasks" message="Unable to fetch tasks at this time." onRetry={refetch} />;
  
   const tasks = data?.items ?? [];
 

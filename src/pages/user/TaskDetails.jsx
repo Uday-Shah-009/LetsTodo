@@ -130,14 +130,22 @@ export default function TaskDetails() {
           })}
         </div>
       </div>
-      <div className="flex justify-center">
-        <div className="w-24 h-24">
+      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Overall Task Progress</h2>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            Track your completion progress for this task
+          </p>
+        </div>
+        <div className="w-24 h-24 shrink-0">
           <CircularProgressbar
             value={progressData?.progress_percentage || 0}
             text={`${progressData?.progress_percentage || 0}%`}
             styles={buildStyles({
               pathColor: "#22c55e",
               trailColor: "#e5e7eb",
+              textColor: "#22c55e",
+              textSize: "24px",
             })}
           />
         </div>

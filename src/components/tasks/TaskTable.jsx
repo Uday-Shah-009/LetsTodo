@@ -1,12 +1,13 @@
-import { Link } from "@tanstack/react-router"
-import { getStatusClasses } from "../../utils/statusColors"
+import { Link } from "@tanstack/react-router";
+import { getStatusClasses } from "../../utils/statusColors";
+import EmptyState from "../ui/EmptyState";
 
 const statusOptions = [
   { label: "All", value: "" },
   { label: "In Progress", value: "in progress" },
   { label: "Completed", value: "complete" },
   { label: "Not Completed", value: "not complete" },
-]
+];
 
 export default function TaskTable({
   tasks,
@@ -32,7 +33,7 @@ export default function TaskTable({
                 key={option.value || "all"}
                 type="button"
                 onClick={() => onStatusChange?.(option.value)}
-                className={`rounded-full px-4 py-2 text-sm border transition-colors ${
+                className={`rounded-full px-4 py-2 text-sm border transition-colors cursor-pointer ${
                   isActive
                     ? "bg-blue-600 text-white border-blue-600"
                     : "bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -65,28 +66,27 @@ export default function TaskTable({
         )}
       </div>
 
-      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden">
-
-        <table className="w-full text-sm">
-
-          <thead className="border-b border-gray-200 dark:border-gray-800">
-            <tr className="text-left">
-              <th className="p-4">Task</th>
-              <th className="p-4">Assigned</th>
-              <th className="p-4">Status</th>
-              <th className="p-4">Description</th>
-              <th className="p-4">Deadline</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {tasks.length === 0 ? (
-              <tr>
-                <td className="p-6 text-center text-gray-500 dark:text-gray-400" colSpan={5}>
-                  No tasks found for this status.
-                </td>
+      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden shadow-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="border-b border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
+              <tr className="text-left font-semibold text-gray-700 dark:text-gray-300">
+                <th className="p-4">Task</th>
+                <th className="p-4">Assigned</th>
+                <th className="p-4">Status</th>
+                <th className="p-4">Description</th>
+                <th className="p-4">Deadline</th>
               </tr>
-            ) : (
+            </thead>
+
+            <tbody>
+              {tasks.length === 0 ? (
+                <tr>
+                  <td className="p-8 text-center" colSpan={5}>
+                    <EmptyState title="No tasks found" description="There are no tasks matching the selected filter." />
+                  </td>
+                </tr>
+              ) : (
               tasks.map((task) => (
                 <tr
                   key={task.id}
@@ -129,6 +129,7 @@ export default function TaskTable({
           </tbody>
         </table>
       </div>
+    </div>
 
       {totalPages > 1 && (
         <div className="flex flex-wrap items-center justify-between gap-3">

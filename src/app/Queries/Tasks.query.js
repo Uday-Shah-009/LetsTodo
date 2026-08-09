@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  AddSubtasksToTask,
+  ApproveSubTaskRequest,
   ApproveTask,
   createTask,
   GetAllTasks,
@@ -8,7 +10,11 @@ import {
   GetTaskbyId,
   GetTaskCreationRequests,
   getTaskProgress,
+  RejectSubTaskRequest,
   RejectTask,
+  ReviseTask,
+  subTaskRequestByuser,
+  subTaskUpdateAll,
   TaskActivityRecorder,
   TaskRequestByuser,
   TaskTimeline,
@@ -16,14 +22,19 @@ import {
 } from "../apis/tasks.api";
 import { toast } from "react-toastify";
 
-export const useGetMyTasks = () => {
-  return useQuery({ queryKey: ["GetMytasks"], queryFn: GetMyTasks });
+export const useGetMyTasks = (options = {}) => {
+  return useQuery({
+    queryKey: ["GetMytasks"],
+    queryFn: GetMyTasks,
+    ...options,
+  });
 };
 
-export const useGetAllTasks = ({ status, page, pageSize } = {}) => {
+export const useGetAllTasks = ({ status, page, pageSize, ...options } = {}) => {
   return useQuery({
     queryKey: ["GetAllTasks", status ?? "", page ?? 1, pageSize ?? 10],
     queryFn: () => GetAllTasks({ status, page, pageSize }),
+    ...options,
   });
 };
 
@@ -36,7 +47,6 @@ export const useCreateTask = () => {
       queryClient.invalidateQueries({ queryKey: ["GetMytasks"] });
     },
     onError: (error) => {
-      console.log("task creation error", error);
       toast.error(error?.response?.data?.message || "Something Went Wrong");
     },
   });
@@ -65,6 +75,7 @@ export const useUpdateSubTask = () => {
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Something Went Wrong");
+      console.log(error.response);
     },
   });
 };
@@ -82,10 +93,10 @@ export const useGetProgress = (id) => {
   });
 };
 
-export const useGetTaskRequests = () => {
+export const useGetTaskRequests = (page = 1, pageSize = 10) => {
   return useQuery({
-    queryKey: ["GetTaskRequests"],
-    queryFn: GetTaskCreationRequests,
+    queryKey: ["GetTaskRequests", page, pageSize],
+    queryFn: () => GetTaskCreationRequests({ page, page_size: pageSize }),
   });
 };
 
@@ -128,10 +139,10 @@ export const useGetTaskTimeLine = (taskId) => {
   });
 };
 
-export const useTaskRequestByuser = () => {
+export const useTaskRequestByuser = (page = 1, pageSize = 10) => {
   return useQuery({
-    queryKey: ["TaskRequestByuser"],
-    queryFn: TaskRequestByuser,
+    queryKey: ["TaskRequestByuser", page, pageSize],
+    queryFn: () => TaskRequestByuser({ page, page_size: pageSize }),
   });
 };
 
@@ -140,10 +151,10 @@ export const useTaskActivityRecorder = () => {
   return useMutation({
     mutationFn: (payload) => TaskActivityRecorder(payload),
     onSuccess: () => {
-    queryClient.invalidateQueries({
-      queryKey: ["task-activities"]
-    })
-      },
+      queryClient.invalidateQueries({
+        queryKey: ["task-activities"],
+      });
+    },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Something Went Wrong");
     },
@@ -155,5 +166,76 @@ export const useGetTaskActivities = (taskId, page, pageSize = 10) => {
     queryKey: ["task-activities", taskId, page, pageSize],
     queryFn: () => getTaskActivities(taskId, page, pageSize),
     enabled: !!taskId,
+  });
+};
+
+export const useAddSubTaskToExistingTask = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload) => AddSubtasksToTask(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GetTaskById"] });
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Something Went Wrong");
+    },
+  });
+};
+
+export const useReviseTask = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload) => ReviseTask(payload),
+    onSuccess: (createdTask) => {
+      queryClient.invalidateQueries({ queryKey: ["GetAllTasks"] });
+      queryClient.invalidateQueries({ queryKey: ["GetMytasks"] });
+      queryClient.invalidateQueries({ queryKey: ["GetTaskById"] });
+      return createdTask;
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Something Went Wrong");
+    },
+  });
+};
+
+export const useSubTaskRequestByuser = (page = 1, pageSize = 10) => {
+  return useQuery({
+    queryKey: ["SubTaskRequestByuser", page, pageSize],
+    queryFn: () => subTaskRequestByuser({ page, page_size: pageSize }),
+  });
+};
+
+export const useSubTaskUpdateAll = (page = 1, pageSize = 10) => {
+  return useQuery({
+    queryKey: ["SubTaskUpdateAll", page, pageSize],
+    queryFn: () => subTaskUpdateAll({ page, page_size: pageSize }),
+  });
+};
+
+export const useApproveSubTaskRequest = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload) => ApproveSubTaskRequest(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["SubTaskUpdateAll"] });
+      toast.success("Subtask request approved successfully");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Something Went Wrong");
+    },
+  });
+};
+
+export const useRejectSubTaskRequest = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload) => RejectSubTaskRequest(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["SubTaskUpdateAll"] });
+      toast.success("Subtask request rejected successfully");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Something Went Wrong");
+    },
   });
 };

@@ -32,13 +32,11 @@ export default function CreateActivityModal({
   const ActivityMutate = useTaskActivityRecorder();
   const ActivityPending = ActivityMutate.isPending;
   const onSubmit = (data) => {
-    console.log(data);
     const payload = {
       ...data,
       sub_task_id: subTaskId,
     };
 
-    console.log("Activity Payload:", payload);
     ActivityMutate.mutate(payload, {
       onSuccess: () => {
         reset();
@@ -60,7 +58,8 @@ export default function CreateActivityModal({
           <button
             type="button"
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            aria-label="Close modal"
+            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white transition cursor-pointer"
           >
             ✕
           </button>

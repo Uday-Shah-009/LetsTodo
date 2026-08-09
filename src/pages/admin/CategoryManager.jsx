@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { Pencil } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import {
-  useCreateDepartment,
-  useGetDepartments,
-  useUpdateDepartment,
+  useGetCategories,
+  useCreateCategory,
+  useDeleteCategory,
 } from "../../app/Queries/admin.query";
-import EditDepartmentModal from "../../components/departments/EditDepartmentModal";
+import ConfirmationModal from "../../components/ConfirmationModal";
 
-export default function AddDepartmentPage() {
-  const [editTarget, setEditTarget] = useState(null);
-
+export default function CategoryManager() {
   const {
     register,
     handleSubmit,
@@ -24,32 +22,39 @@ export default function AddDepartmentPage() {
   });
 
   const {
-    data: departments = [],
+    data: categories = [],
     isPending,
-  } = useGetDepartments();
+  } = useGetCategories();
 
-  const DepartmentMutate = useCreateDepartment();
-  const updateDepartmentMutate = useUpdateDepartment();
+  const createCategoryMutate = useCreateCategory();
+  const deleteCategoryMutate = useDeleteCategory();
+
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   const onSubmit = (data) => {
-    DepartmentMutate.mutate(data, {
+    createCategoryMutate.mutate(data, {
       onSuccess: (res) => {
-        toast.success(`${res.name} added`);
+        toast.success(`${res.name} category added`);
         reset();
       },
     });
   };
 
-  const handleEditSave = (newName) => {
-    if (!editTarget) return;
-    updateDepartmentMutate.mutate(
-      { id: editTarget.id, deptname: newName },
-      {
-        onSuccess: () => {
-          setEditTarget(null);
-        },
-      }
-    );
+  const handleDeleteClick = (category) => {
+    setDeleteTarget(category);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (!deleteTarget) return;
+    deleteCategoryMutate.mutate(deleteTarget.id, {
+      onSuccess: () => {
+        toast.success(`${deleteTarget.name} category deleted`);
+        setDeleteTarget(null);
+      },
+      onError: () => {
+        setDeleteTarget(null);
+      },
+    });
   };
 
   return (
@@ -57,14 +62,15 @@ export default function AddDepartmentPage() {
       <div className="mx-auto max-w-2xl">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
-            Department Management
+            Category Management
           </h1>
 
           <p className="mt-2 text-slate-600 dark:text-slate-400">
-            Create and manage organization departments.
+            Create and manage task categories.
           </p>
         </div>
 
+        {/* Create Category Form */}
         <div
           className="
             rounded-3xl
@@ -78,31 +84,27 @@ export default function AddDepartmentPage() {
           "
         >
           <h2 className="mb-6 text-xl font-semibold text-slate-900 dark:text-white">
-            Add Department
+            Add Category
           </h2>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-                Department Name
+                Category Name
               </label>
 
               <input
                 type="text"
-                placeholder="Engineering"
+                placeholder="Bug"
                 {...register("name", {
-                  required: "Department name is required",
+                  required: "Category name is required",
                   minLength: {
                     value: 2,
-                    message: "Department name must be at least 2 characters",
+                    message: "Category name must be at least 2 characters",
                   },
                   maxLength: {
                     value: 100,
-                    message: "Department name cannot exceed 100 characters",
-                  },
-                  pattern: {
-                    value: /^[a-zA-Z0-9\s-]+$/,
-                    message: "Only letters, numbers, spaces and hyphens allowed",
+                    message: "Category name cannot exceed 100 characters",
                   },
                 })}
                 className="
@@ -136,7 +138,7 @@ export default function AddDepartmentPage() {
             <div className="flex justify-end">
               <button
                 type="submit"
-                disabled={DepartmentMutate.isPending}
+                disabled={createCategoryMutate.isPending}
                 className="
                   rounded-xl
                   bg-blue-500
@@ -150,29 +152,30 @@ export default function AddDepartmentPage() {
                   disabled:opacity-50
                 "
               >
-                {DepartmentMutate.isPending
+                {createCategoryMutate.isPending
                   ? "Creating..."
-                  : "Create Department"}
+                  : "Create Category"}
               </button>
             </div>
           </form>
         </div>
 
+        {/* Categories List */}
         <div className="mt-8 rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-[#07152F]">
           <div className="border-b border-slate-200 p-6 dark:border-white/10">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
-                  Available Departments
+                  Available Categories
                 </h2>
 
                 <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                  Departments currently available in the organization.
+                  Categories currently available for tasks.
                 </p>
               </div>
 
               <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
-                {departments.length} Departments
+                {categories.length} Categories
               </span>
             </div>
           </div>
@@ -201,19 +204,14 @@ export default function AddDepartmentPage() {
 
                     <div className="h-6 w-14 rounded bg-slate-200 dark:bg-slate-700" />
                   </div>
-
-                  <div className="mt-6 border-t border-slate-200 pt-4 dark:border-white/10">
-                    <div className="h-4 w-24 rounded bg-slate-200 dark:bg-slate-800" />
-                    <div className="mt-2 h-8 w-12 rounded bg-slate-300 dark:bg-slate-700" />
-                  </div>
                 </div>
               ))}
             </div>
-          ) : departments.length > 0 ? (
+          ) : categories.length > 0 ? (
             <div className="grid gap-4 p-6 sm:grid-cols-2 lg:grid-cols-3">
-              {departments.map((department) => (
+              {categories.map((category) => (
                 <div
-                  key={department.id}
+                  key={category.id}
                   className="
                     rounded-2xl
                     border
@@ -229,11 +227,11 @@ export default function AddDepartmentPage() {
                   <div className="flex items-start justify-between">
                     <div>
                       <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                        {department.name}
+                        {category.name}
                       </h3>
 
                       <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                        Department
+                        Category
                       </p>
                     </div>
 
@@ -242,32 +240,22 @@ export default function AddDepartmentPage() {
                     </span>
                   </div>
 
-                  <div className="mt-4 border-t border-slate-200 pt-4 dark:border-white/10 flex items-center justify-between">
-                    <div>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">
-                        Total Persons
-                      </p>
-
-                      <p className="mt-0.5 text-xl font-bold text-slate-900 dark:text-white">
-                        {department.user_count ?? 0}
-                      </p>
-                    </div>
-
+                  <div className="mt-4 border-t border-slate-200 pt-4 dark:border-white/10">
                     <button
                       type="button"
-                      onClick={() => setEditTarget(department)}
+                      onClick={() => handleDeleteClick(category)}
                       className="
-                        flex items-center gap-1.5
-                        rounded-xl px-3 py-1.5
-                        text-xs font-semibold
-                        text-blue-600 dark:text-blue-400
-                        bg-blue-50 dark:bg-blue-500/10
-                        hover:bg-blue-100 dark:hover:bg-blue-500/20
-                        transition cursor-pointer
+                        flex items-center gap-2
+                        rounded-lg px-3 py-1.5
+                        text-sm font-medium
+                        text-red-500
+                        bg-red-50 dark:bg-red-500/10
+                        hover:bg-red-100 dark:hover:bg-red-500/20
+                        transition
                       "
                     >
-                      <Pencil className="w-3.5 h-3.5" />
-                      Edit
+                      <Trash2 className="w-4 h-4" />
+                      Delete
                     </button>
                   </div>
                 </div>
@@ -276,24 +264,28 @@ export default function AddDepartmentPage() {
           ) : (
             <div className="flex flex-col items-center justify-center py-16">
               <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                No Departments Found
+                No Categories Found
               </h3>
 
               <p className="mt-2 text-slate-500 dark:text-slate-400">
-                Create your first department using the form above.
+                Create your first category using the form above.
               </p>
             </div>
           )}
         </div>
       </div>
 
-      {/* Edit Department Modal */}
-      <EditDepartmentModal
-        isOpen={!!editTarget}
-        onClose={() => setEditTarget(null)}
-        department={editTarget}
-        onSave={handleEditSave}
-        isPending={updateDepartmentMutate.isPending}
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={handleDeleteConfirm}
+        title="Delete Category"
+        message={`Are you sure you want to delete "${deleteTarget?.name}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+        isPending={deleteCategoryMutate.isPending}
       />
     </div>
   );

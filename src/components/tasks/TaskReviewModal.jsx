@@ -184,7 +184,9 @@ export default function TaskReviewModal({ open, onClose, task }) {
                     Status
                   </label>
                   <div className="mt-1">
-                    <span className={`px-2 py-1 text-xs rounded-md ${getStatusClasses(task?.status)}`}>
+                    <span
+                      className={`px-2 py-1 text-xs rounded-md ${getStatusClasses(task?.status)}`}
+                    >
                       {task?.status}
                     </span>
                   </div>
