@@ -5,12 +5,15 @@ export const GetMyTasks = async () => {
   return res.data;
 };
 
-export const GetAllTasks = async ({ status, page, pageSize } = {}) => {
+export const GetAllTasks = async ({ status, page, pageSize, search, department_id, category_id } = {}) => {
   const params = {};
 
   if (status) params.status = status;
   if (page) params.page = page;
   if (pageSize) params.page_size = pageSize;
+  if (search) params.search = search;
+  if (department_id) params.department_id = department_id;
+  if (category_id) params.category_id = category_id;
 
   const res = await axiosInstance.get("tasks", {
     params,
@@ -66,7 +69,6 @@ export const ApproveTask = async (payload) => {
 
 export const TaskTimeline = async (task_id) => {
   const res = await axiosInstance.get(`/tasks/${task_id}/timeline`);
-  console.log(res.data);
   return res.data;
 };
 
@@ -77,7 +79,6 @@ export const TaskRequestByuser = async (params) => {
 
 export const TaskActivityRecorder = async (payload) => {
   const res = await axiosInstance.post("/activities", payload);
-  console.log(res.data);
   return res.data;
 };
 
@@ -96,9 +97,10 @@ export const AddSubtasksToTask = async (payload) => {
   return res.data;
 };
 
-export const ReviseTask = async ({ taskId, bumpType }) => {
+export const ReviseTask = async ({ taskId, bumpType, sub_tasks }) => {
   const res = await axiosInstance.post(`/tasks/${taskId}/revise`, {
     bump_type: bumpType,
+    ...(sub_tasks ? { sub_tasks } : {}),
   });
   return res.data;
 };
@@ -109,7 +111,7 @@ export const subTaskRequestByuser = async (params) => {
 };
 
 export const subTaskUpdateAll = async(params) => {
-  const res = await axiosInstance.get("/subtask-update-requests",{params})
+  const res = await axiosInstance.get("/subtask-update-requests",{params});
   return res.data;
 }
 

@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "@tanstack/react-router";
 import { useChangePassword } from "../app/Queries/users.query";
 import { toast } from "react-toastify";
 import { Eye, EyeOff, ArrowLeft, Lock } from "lucide-react";
 
 export default function ChangePasswordUI() {
-  const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
+  const { register, handleSubmit, control, reset, formState: { errors } } = useForm();
   const navigate = useNavigate();
   const changePasswordMutate = useChangePassword();
   const [show, setShow] = useState({
@@ -15,7 +15,8 @@ export default function ChangePasswordUI() {
     confirm: false,
   });
 
-  const newPassword = watch("new_password", "");
+  const newPassword = useWatch({ control, name: "new_password", defaultValue: "" });
+  const confirmPassword = useWatch({ control, name: "confirm_password", defaultValue: "" });
 
   const getStrength = (password) => {
     if (!password) return "";
@@ -141,7 +142,7 @@ export default function ChangePasswordUI() {
                 {...register("confirm_password", {
                   required: "Please confirm your new password",
                   validate: (value) =>
-                    value === watch("new_password") || "Passwords do not match",
+                    value === newPassword || "Passwords do not match",
                 })}
                 placeholder="Confirm new password"
                 className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-3.5 py-2.5 rounded-l-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -158,15 +159,15 @@ export default function ChangePasswordUI() {
               </button>
             </div>
 
-            {watch("confirm_password") && (
+            {confirmPassword && (
               <p
                 className={`text-xs mt-1 font-medium ${
-                  watch("confirm_password") === newPassword
+                  confirmPassword === newPassword
                     ? "text-green-600 dark:text-green-400"
                     : "text-red-500 dark:text-red-400"
                 }`}
               >
-                {watch("confirm_password") === newPassword
+                {confirmPassword === newPassword
                   ? "✓ Passwords match"
                   : "✗ Passwords do not match"}
               </p>

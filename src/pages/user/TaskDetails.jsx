@@ -8,10 +8,15 @@ import {
 } from "../../app/Queries/Tasks.query";
 import { toast } from "react-toastify";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { getStatusClasses } from "../../utils/statusColors";
 import { useState } from "react";
 import CreateActivityModal from "../../components/tasks/TaskActivityLogger";
+import SubTaskCompletionModal from "../../components/tasks/SubTaskCompletionModal";
 import AllActivities from "../../components/tasks/AllActivities";
+
+import { useAuthStore } from "../../store/authStore";
 
 export default function TaskDetails() {
   const { taskId } = taskDetailsRoute.useParams();
@@ -21,13 +26,25 @@ export default function TaskDetails() {
   const isUpdatingSubtask = UpdateSubTaskMutate.isPending;
   const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
   const [selectedSubTask, setSelectedSubTask] = useState(null);
+  const [isCompletionModalOpen, setIsCompletionModalOpen] = useState(false);
+  const [subTaskToComplete, setSubTaskToComplete] = useState(null);
   const navigate = useNavigate();
   const user = useUser();
+  const authUsername = useAuthStore((s) => s.username);
   const backPath = user?.role === "user" ? "/tasks" : "/admin/tasks";
-  const handleCheckboxChange = (id) => {
-    UpdateSubTaskMutate.mutate(id, {
+
+  const handleTickClick = (subtask) => {
+    setSubTaskToComplete(subtask);
+    setIsCompletionModalOpen(true);
+  };
+
+  const handleConfirmCompletion = () => {
+    if (!subTaskToComplete) return;
+    UpdateSubTaskMutate.mutate(subTaskToComplete.id, {
       onSuccess: (res) => {
-        toast.success(res.message || "Task updated");
+        toast.success(res.message || "Subtask completed successfully");
+        setIsCompletionModalOpen(false);
+        setSubTaskToComplete(null);
       },
     });
   };
@@ -37,7 +54,22 @@ export default function TaskDetails() {
     setIsActivityModalOpen(true);
   };
 
-  if (TaskisPending) return <div>Loading Task {taskId}</div>;
+  if (TaskisPending) return <LoadingSpinner message="Loading task details..." />;
+
+  const currentUserId =
+    user?.id ??
+    user?.user_id ??
+    (user?.sub && !isNaN(Number(user.sub)) ? Number(user.sub) : null);
+  const currentUserName = (
+    authUsername ||
+    user?.username ||
+    user?.name ||
+    (typeof user?.sub === "string" ? user.sub : "") ||
+    ""
+  )
+    .toLowerCase()
+    .trim();
+
   return (
     <div className="space-y-8">
       <button
@@ -86,41 +118,103 @@ export default function TaskDetails() {
         <div className="p-5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 space-y-3">
           {taskData.sub_tasks.map((item) => {
             const isCompleted = item.status === "complete";
+
+            const assignedId =
+              item?.assigned_to?.id != null
+                ? Number(item.assigned_to.id)
+                : null;
+            const assignedName = (
+              item?.assigned_to?.name ||
+              (typeof item?.assigned_to === "string" ? item.assigned_to : "") ||
+              ""
+            )
+              .toLowerCase()
+              .trim();
+
+            const isAssignedToCurrentUser = Boolean(
+              (assignedId != null &&
+                currentUserId != null &&
+                assignedId === currentUserId) ||
+              (assignedName !== "" &&
+                currentUserName !== "" &&
+                assignedName === currentUserName),
+            );
+            const canModify = isAssignedToCurrentUser && !isCompleted;
+
             return (
               <div
                 key={item.id}
                 className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 space-y-3"
               >
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center gap-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <label className="flex items-center gap-3 cursor-pointer">
                     <input
                       type="checkbox"
-                      className="w-4 h-4 cursor-pointer"
+                      className={`w-4 h-4 ${
+                        !isAssignedToCurrentUser
+                          ? "cursor-not-allowed opacity-60"
+                          : "cursor-pointer"
+                      }`}
                       checked={isCompleted}
-                      disabled={isCompleted || isUpdatingSubtask}
-                      onChange={() => handleCheckboxChange(item.id)}
+                      disabled={
+                        !isAssignedToCurrentUser ||
+                        isCompleted ||
+                        isUpdatingSubtask
+                      }
+                      onChange={() =>
+                        isAssignedToCurrentUser &&
+                        !isCompleted &&
+                        handleTickClick(item)
+                      }
+                      title={
+                        !isAssignedToCurrentUser
+                          ? `Assigned to ${item.assigned_to?.name || "another user"}`
+                          : ""
+                      }
                     />
 
-                    <span
-                      className={`${
-                        isCompleted
-                          ? "line-through text-gray-400"
-                          : "text-gray-900 dark:text-gray-100"
-                      }`}
-                    >
-                      {item.title}
-                    </span>
+                    <div className="flex flex-col">
+                      <span
+                        className={`${
+                          isCompleted
+                            ? "line-through text-gray-400"
+                            : "text-gray-900 dark:text-gray-100"
+                        }`}
+                      >
+                        {item.title}
+                      </span>
+                      {item.assigned_to && (
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          Assigned to:{" "}
+                          <span className="font-medium text-gray-700 dark:text-gray-300">
+                            {item.assigned_to.name || item.assigned_to}
+                          </span>
+                          {!isAssignedToCurrentUser && (
+                            <span className="ml-2 text-amber-600 dark:text-amber-400 font-normal">
+                              (Not assigned to you)
+                            </span>
+                          )}
+                        </span>
+                      )}
+                    </div>
                   </label>
 
                   <button
                     type="button"
-                    disabled={isCompleted}
-                    onClick={() => handleOpenActivityModal(item)}
-                    className={`px-3 py-1.5 text-sm rounded-lg text-white ${
+                    disabled={!canModify}
+                    onClick={() => canModify && handleOpenActivityModal(item)}
+                    className={`px-3 py-1.5 text-sm rounded-lg font-medium transition-colors ${
                       isCompleted
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-blue-600 hover:bg-blue-700"
+                        ? "bg-gray-300 dark:bg-gray-800 text-gray-500 cursor-not-allowed"
+                        : !isAssignedToCurrentUser
+                          ? "bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed"
+                          : "bg-blue-600 hover:bg-blue-700 text-white"
                     }`}
+                    title={
+                      !isAssignedToCurrentUser
+                        ? `Only ${item.assigned_to?.name || "the assigned user"} can log activity`
+                        : ""
+                    }
                   >
                     {isCompleted ? "Completed" : "+ Add Activity"}
                   </button>
@@ -132,7 +226,9 @@ export default function TaskDetails() {
       </div>
       <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Overall Task Progress</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            Overall Task Progress
+          </h2>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
             Track your completion progress for this task
           </p>
@@ -159,6 +255,16 @@ export default function TaskDetails() {
         }}
         subTaskId={selectedSubTask?.id}
         subTaskTitle={selectedSubTask?.title}
+      />
+      <SubTaskCompletionModal
+        isOpen={isCompletionModalOpen}
+        onClose={() => {
+          setIsCompletionModalOpen(false);
+          setSubTaskToComplete(null);
+        }}
+        onConfirm={handleConfirmCompletion}
+        subTask={subTaskToComplete}
+        isLoading={isUpdatingSubtask}
       />
     </div>
   );

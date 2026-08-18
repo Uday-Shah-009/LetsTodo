@@ -41,9 +41,9 @@ export default function CreateActivityModal({
       onSuccess: () => {
         reset();
         toast.success("Activity Recorded");
+        onClose?.();
       },
     });
-    onClose?.();
   };
 
   if (!isOpen) return null;
@@ -58,8 +58,9 @@ export default function CreateActivityModal({
           <button
             type="button"
             onClick={onClose}
+            disabled={ActivityPending}
             aria-label="Close modal"
-            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white transition cursor-pointer"
+            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             ✕
           </button>
@@ -73,13 +74,14 @@ export default function CreateActivityModal({
 
             <input
               type="text"
+              disabled={ActivityPending}
               placeholder="Implemented Login API"
               {...register("title", {
                 required: "Title is required",
                 minLength: { value: 3, message: "Minimum 3 characters" },
                 maxLength: { value: 200, message: "Maximum 200 characters" },
               })}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 disabled:opacity-60"
             />
 
             {errors.title && (
@@ -97,13 +99,14 @@ export default function CreateActivityModal({
 
             <textarea
               rows={4}
+              disabled={ActivityPending}
               placeholder="Describe the work completed..."
               {...register("description", {
                 required: "Description is required",
                 minLength: { value: 10, message: "Minimum 10 characters" },
                 maxLength: { value: 2000, message: "Maximum 2000 characters" },
               })}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 disabled:opacity-60"
             />
 
             {errors.description && (
@@ -119,11 +122,12 @@ export default function CreateActivityModal({
 
             <textarea
               rows={3}
+              disabled={ActivityPending}
               placeholder="Additional details..."
               {...register("note", {
                 maxLength: { value: 500, message: "Maximum 500 characters" },
               })}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 disabled:opacity-60"
             />
           </div>
 
@@ -138,7 +142,8 @@ export default function CreateActivityModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border border-gray-300 dark:border-gray-700 px-4 py-2"
+              disabled={ActivityPending}
+              className="rounded-lg border border-gray-300 dark:border-gray-700 px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
@@ -146,7 +151,7 @@ export default function CreateActivityModal({
             <button
               type="submit"
               disabled={ActivityPending}
-              className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+              className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {ActivityPending ? "Recording..." : "Record Activity"}
             </button>

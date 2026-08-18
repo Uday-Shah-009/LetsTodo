@@ -14,6 +14,12 @@ export default function TaskTable({
   basePath = "/tasks",
   selectedStatus = "",
   onStatusChange,
+  departments,
+  selectedDepartment = "",
+  onDepartmentChange,
+  categories,
+  selectedCategory = "",
+  onCategoryChange,
   page = 1,
   totalPages = 1,
   onPageChange,
@@ -45,25 +51,69 @@ export default function TaskTable({
           })}
         </div>
 
-        {onPageSizeChange && (
-          <div className="flex items-center gap-2">
-            <label htmlFor="pageSizeSelect" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Show
-            </label>
-            <select
-              id="pageSizeSelect"
-              value={pageSize}
-              onChange={(e) => onPageSizeChange(Number(e.target.value))}
-              className="rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer"
-            >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={50}>50</option>
-            </select>
-            <span className="text-sm text-gray-500 dark:text-gray-400">entries</span>
-          </div>
-        )}
+        <div className="flex flex-wrap items-center gap-4">
+          {departments && (
+            <div className="flex items-center gap-2">
+              <label htmlFor="departmentSelect" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Department:
+              </label>
+              <select
+                id="departmentSelect"
+                value={selectedDepartment || ""}
+                onChange={(e) => onDepartmentChange?.(e.target.value)}
+                className="rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer"
+              >
+                <option value="">All Departments</option>
+                {departments.map((dept) => (
+                  <option key={dept.id} value={dept.id}>
+                    {dept.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {categories && (
+            <div className="flex items-center gap-2">
+              <label htmlFor="categorySelect" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Category:
+              </label>
+              <select
+                id="categorySelect"
+                value={selectedCategory || ""}
+                onChange={(e) => onCategoryChange?.(e.target.value)}
+                className="rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer"
+              >
+                <option value="">All Categories</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {onPageSizeChange && (
+            <div className="flex items-center gap-2">
+              <label htmlFor="pageSizeSelect" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Show
+              </label>
+              <select
+                id="pageSizeSelect"
+                value={pageSize}
+                onChange={(e) => onPageSizeChange(Number(e.target.value))}
+                className="rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer"
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+              </select>
+              <span className="text-sm text-gray-500 dark:text-gray-400">entries</span>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden shadow-sm">

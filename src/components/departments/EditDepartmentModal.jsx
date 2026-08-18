@@ -13,7 +13,6 @@ export default function EditDepartmentModal({
     register,
     handleSubmit,
     setValue,
-    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {

@@ -30,10 +30,19 @@ export const useGetMyTasks = (options = {}) => {
   });
 };
 
-export const useGetAllTasks = ({ status, page, pageSize, ...options } = {}) => {
+export const useGetAllTasks = ({ status, page, pageSize, search, department_id, category_id, ...options } = {}) => {
   return useQuery({
-    queryKey: ["GetAllTasks", status ?? "", page ?? 1, pageSize ?? 10],
-    queryFn: () => GetAllTasks({ status, page, pageSize }),
+    queryKey: [
+      "GetAllTasks",
+      status ?? "",
+      page ?? 1,
+      pageSize ?? 10,
+      search ?? "",
+      department_id ?? "",
+      category_id ?? "",
+    ],
+    queryFn: () =>
+      GetAllTasks({ status, page, pageSize, search, department_id, category_id }),
     ...options,
   });
 };
@@ -72,10 +81,10 @@ export const useUpdateSubTask = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GetTaskById"] });
       queryClient.invalidateQueries({ queryKey: ["GetProgressById"] });
+      queryClient.invalidateQueries({ queryKey: ["GetTaskTimeline"] });
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Something Went Wrong");
-      console.log(error.response);
     },
   });
 };
@@ -106,6 +115,7 @@ export const useRejectTask = () => {
     mutationFn: (payload) => RejectTask(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GetTaskRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["GetMytasks"] });
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Something Went Wrong");
@@ -119,6 +129,7 @@ export const useApproveTask = () => {
     mutationFn: (payload) => ApproveTask(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GetTaskRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["GetMytasks"] });
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Something Went Wrong");
@@ -218,6 +229,7 @@ export const useApproveSubTaskRequest = () => {
     mutationFn: (payload) => ApproveSubTaskRequest(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["SubTaskUpdateAll"] });
+      queryClient.invalidateQueries({ queryKey: ["SubTaskRequestByuser"] });
       toast.success("Subtask request approved successfully");
     },
     onError: (error) => {
@@ -232,6 +244,7 @@ export const useRejectSubTaskRequest = () => {
     mutationFn: (payload) => RejectSubTaskRequest(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["SubTaskUpdateAll"] });
+      queryClient.invalidateQueries({ queryKey: ["SubTaskRequestByuser"] });
       toast.success("Subtask request rejected successfully");
     },
     onError: (error) => {

@@ -47,6 +47,7 @@ export default function SubTaskReviewModal({ open, onClose, request }) {
     resetReject({
       comment: "",
     });
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setAction(null);
   }, [request, resetApprove, resetReject]);
 
@@ -117,8 +118,13 @@ export default function SubTaskReviewModal({ open, onClose, request }) {
 
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <label className="text-xs text-[#667085] dark:text-[#94a3b8]">Subtask ID</label>
-                <p className="font-semibold text-[#101828] dark:text-white">#{request?.sub_task_id}</p>
+                <label className="text-xs text-[#667085] dark:text-[#94a3b8]">SubTask Title</label>
+                <p className="font-semibold text-[#101828] dark:text-white">#{request?.sub_task_title}</p>
+              </div>
+
+              <div>
+                <label className="text-xs text-[#667085] dark:text-[#94a3b8]">Task Title</label>
+                <p className="font-semibold text-[#101828] dark:text-white">#{request?.task_title}</p>
               </div>
 
               <div>

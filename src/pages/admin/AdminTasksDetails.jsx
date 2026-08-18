@@ -7,26 +7,18 @@ import "react-circular-progressbar/dist/styles.css";
 import SubTaskTimeline from "../../components/tasks/SubTaskTimeline";
 import { getStatusClasses } from "../../utils/statusColors";
 import AllActivities from "../../components/tasks/AllActivities";
-import { useState } from "react";
-import ReviseTaskModal from "../../components/tasks/ReviseTaskModal";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
 
 export default function TaskDetails() {
   const { taskId } = adminTaskDetailsRoute.useParams();
   const navigate = useNavigate();
   const user = useUser();
-  const [isReviseModalOpen, setIsReviseModalOpen] = useState(false);
   const backPath = user?.role === "user" ? "/tasks" : "/admin/tasks";
   const { data: taskData, isPending: TaskisPending } = useGetTaskById(taskId);
   const { data: progressData } = useGetProgress(taskId);
 
-  const handleRevised = (createdTask) => {
-    if (createdTask?.id) {
-      navigate({ to: `/admin/tasks/${createdTask.id}` });
-    }
-  };
-
   if (TaskisPending)
-    return <div className="text-[18px]">Loading Task {taskId}</div>;
+    return <LoadingSpinner message="Loading task details..." />;
   return (
     <div className="space-y-8">
       <button
@@ -80,9 +72,9 @@ export default function TaskDetails() {
 
           <button
             type="button"
-            onClick={() => setIsReviseModalOpen(true)}
+            onClick={() => navigate({ to: `/admin/tasks/${taskId}/revise` })}
             disabled={taskData.status !== "complete"}
-            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400 cursor-pointer"
           >
             Revise Task
           </button>
@@ -147,15 +139,9 @@ export default function TaskDetails() {
       </div>
       <div className="space-y-4">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Subtask Performance Timeline</h2>
-        <SubTaskTimeline taskId={taskId} />
+        <SubTaskTimeline taskId={taskId} taskData={taskData} />
       </div>
       <AllActivities taskId={taskId} />
-      <ReviseTaskModal
-        open={isReviseModalOpen}
-        onClose={() => setIsReviseModalOpen(false)}
-        task={taskData}
-        onRevised={handleRevised}
-      />
     </div>
   );
 }

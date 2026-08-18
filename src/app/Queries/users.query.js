@@ -47,10 +47,13 @@ export const useChangePassword = () => {
 }
 
 export const useAssignDepartments =  () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (payload) => assignDepartments(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GetUsers"] });
+    },
     onError: (error) => {
-      console.log(error?.response?.data)
       toast.error(error?.response?.data?.message || "Something Went Wrong");
     },
   })

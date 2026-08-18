@@ -20,10 +20,12 @@ export const ChangePassword = async (payload) => {
   return res.data;
 };
 
-export const assignDepartments = async (paylaod) => {
-  const { user_id, department_ids } = paylaod;
+export const assignDepartments = async (payload) => {
+  const { user_id, department_ids } = payload;
+  console.log(payload);
   const res = await axiosInstance.put(`/users/${user_id}/departments`, {
     department_ids: department_ids,
   });
+  console.log(res.data);
   return res.data;
 };

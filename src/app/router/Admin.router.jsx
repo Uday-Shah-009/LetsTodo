@@ -1,21 +1,39 @@
+import React, { lazy, Suspense } from "react";
 import { createRoute } from "@tanstack/react-router";
 import { rootRoute } from "./router";
 
 import AdminLayout from "../../layout/AdminLayout";
-
-import AdminDashboard from "../../pages/admin/AdminDashboard";
-import AdminTasks from "../../pages/admin/AdminTasks";
-import AdminTasksDetails from "../../pages/admin/AdminTasksDetails";
-import AdminTimeline from "../../pages/admin/AdminTimeline";
-import Users from "../../pages/admin/Users";
-import Settings from "../../pages/admin/Settings";
-import AdminAddTask from "../../pages/admin/AdminAddTasks";
 import { requireAuth } from "./requireAuth";
 import { checkUserRole } from "./isAdmin";
-import TaskRequestsPage from "../../pages/admin/TaskCreationRequests";
-import AddDepartmentPage from "../../pages/admin/DepartmentManager";
-import ManageUserDepartment from "../../components/users/ManageUserDepartments";
-import CategoryManager from "../../pages/admin/CategoryManager";
+
+/* Lazy-loaded Admin Pages */
+
+const AdminDashboard = lazy(() => import("../../pages/admin/AdminDashboard"));
+const AdminTasks = lazy(() => import("../../pages/admin/AdminTasks"));
+const AdminTasksDetails = lazy(() => import("../../pages/admin/AdminTasksDetails"));
+const AdminTimeline = lazy(() => import("../../pages/admin/AdminTimeline"));
+const Users = lazy(() => import("../../pages/admin/Users"));
+const Settings = lazy(() => import("../../pages/admin/Settings"));
+const AdminAddTask = lazy(() => import("../../pages/admin/AdminAddTasks"));
+const TaskRequestsPage = lazy(() => import("../../pages/admin/TaskCreationRequests"));
+const AddDepartmentPage = lazy(() => import("../../pages/admin/DepartmentManager"));
+import ManageUserDepartment from "../../components/users/ManageUserDepartments"
+const CategoryManager = lazy(() => import("../../pages/admin/CategoryManager"));
+const ReviseTaskPage = lazy(() => import("../../pages/ReviseTaskPage"));
+
+/* Suspense Wrapper */
+
+const withSuspense = (Component) => (props) => (
+  <Suspense
+    fallback={
+      <div className="flex items-center justify-center h-full w-full min-h-[200px]">
+        <div className="w-6 h-6 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
+      </div>
+    }
+  >
+    {React.createElement(Component, props)}
+  </Suspense>
+);
 
 /* Admin Parent Route */
 
@@ -30,7 +48,7 @@ export const adminLayoutRoute = createRoute({
 export const adminDashboardRoute = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/dashboard",
-  component: AdminDashboard,
+  component: withSuspense(AdminDashboard),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -42,7 +60,7 @@ export const adminDashboardRoute = createRoute({
 export const adminTasksRoute = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/tasks",
-  component: AdminTasks,
+  component: withSuspense(AdminTasks),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -52,7 +70,7 @@ export const adminTasksRoute = createRoute({
 export const adminAddTasksRoute = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/add-task",
-  component: AdminAddTask,
+  component: withSuspense(AdminAddTask),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -63,7 +81,17 @@ export const adminAddTasksRoute = createRoute({
 export const adminTaskDetailsRoute = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/tasks/$taskId",
-  component: AdminTasksDetails,
+  component: withSuspense(AdminTasksDetails),
+  beforeLoad: () => {
+    requireAuth();
+    checkUserRole();
+  },
+});
+
+export const adminTaskReviseRoute = createRoute({
+  getParentRoute: () => adminLayoutRoute,
+  path: "/tasks/$taskId/revise",
+  component: withSuspense(ReviseTaskPage),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -75,7 +103,7 @@ export const adminTaskDetailsRoute = createRoute({
 export const adminTimelineRoute = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/timeline",
-  component: AdminTimeline,
+  component: withSuspense(AdminTimeline),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -87,7 +115,7 @@ export const adminTimelineRoute = createRoute({
 export const adminUsersRoute = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/users",
-  component: Users,
+  component: withSuspense(Users),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -99,7 +127,7 @@ export const adminUsersRoute = createRoute({
 export const adminSettingsRoute = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/settings",
-  component: Settings,
+  component: withSuspense(Settings),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -109,7 +137,7 @@ export const adminSettingsRoute = createRoute({
 export const adminTaskRequests = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/task-requests",
-  component: TaskRequestsPage,
+  component: withSuspense(TaskRequestsPage),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -119,7 +147,7 @@ export const adminTaskRequests = createRoute({
 export const adminDepartmentManager = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/departments",
-  component: AddDepartmentPage,
+  component: withSuspense(AddDepartmentPage),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -129,7 +157,7 @@ export const adminDepartmentManager = createRoute({
 export const adminUserDepartmentManager = createRoute({
   getParentRoute: () => adminUsersRoute,
   path: "$id/departments",
-  component: ManageUserDepartment,
+  component: withSuspense(ManageUserDepartment),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -139,7 +167,7 @@ export const adminUserDepartmentManager = createRoute({
 export const adminCategoryManager = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/categories",
-  component: CategoryManager,
+  component: withSuspense(CategoryManager),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -152,6 +180,7 @@ export const adminRoutes = adminLayoutRoute.addChildren([
   adminDashboardRoute,
   adminTasksRoute,
   adminTaskDetailsRoute,
+  adminTaskReviseRoute,
   adminAddTasksRoute,
   adminTimelineRoute,
   adminUsersRoute.addChildren([adminUserDepartmentManager]),
@@ -160,3 +189,4 @@ export const adminRoutes = adminLayoutRoute.addChildren([
   adminDepartmentManager,
   adminCategoryManager,
 ]);
+

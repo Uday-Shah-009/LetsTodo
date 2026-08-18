@@ -1,15 +1,23 @@
-import { useState } from "react"
-import { Outlet, useLocation } from "@tanstack/react-router"
+import { useState, useEffect } from "react"
+import { Outlet, useLocation, useNavigate } from "@tanstack/react-router"
 import AdminSidebar from "../components/Sidebar/AdminSidebar"
 import { useAuthStore } from "../store/authStore"
 import { useUser } from "../utils/token"
+import { requireAuth } from "../app/router/requireAuth"
 import { Menu, User, ChevronRight } from "lucide-react"
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const location = useLocation()
+  const navigate = useNavigate()
   const user = useUser()
   const username = useAuthStore((s) => s.username)
+
+  useEffect(() => {
+    requireAuth(navigate)
+    const timer = setInterval(() => requireAuth(navigate), 5000)
+    return () => clearInterval(timer)
+  }, [navigate, location.pathname])
 
   const displayUsername = username || user?.name || "Admin"
 

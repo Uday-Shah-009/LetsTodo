@@ -1,4 +1,5 @@
 import { useGetAllTasks } from "../../app/Queries/Tasks.query";
+import { useGetDepartments, useGetCategories } from "../../app/Queries/admin.query";
 import TaskTable from "../../components/tasks/TaskTable";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import ErrorState from "../../components/ui/ErrorState";
@@ -9,11 +10,18 @@ import { Plus } from "lucide-react";
 export default function AdminTasks() {
   const navigate = useNavigate();
   const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
+  const { data: departments = [] } = useGetDepartments();
+  const { data: categories = [] } = useGetCategories();
+
   const { data, isPending, error, refetch } = useGetAllTasks({
     status: selectedStatus,
+    department_id: selectedDepartment,
+    category_id: selectedCategory,
     page,
     pageSize,
   });
@@ -25,6 +33,16 @@ export default function AdminTasks() {
 
   const handleStatusChange = (status) => {
     setSelectedStatus(status);
+    setPage(1);
+  };
+
+  const handleDepartmentChange = (departmentId) => {
+    setSelectedDepartment(departmentId);
+    setPage(1);
+  };
+
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategory(categoryId);
     setPage(1);
   };
 
@@ -60,6 +78,12 @@ export default function AdminTasks() {
         basePath="/admin/tasks"
         selectedStatus={selectedStatus}
         onStatusChange={handleStatusChange}
+        departments={departments}
+        selectedDepartment={selectedDepartment}
+        onDepartmentChange={handleDepartmentChange}
+        categories={categories}
+        selectedCategory={selectedCategory}
+        onCategoryChange={handleCategoryChange}
         page={page}
         totalPages={data?.total_pages ?? 1}
         onPageChange={setPage}

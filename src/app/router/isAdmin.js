@@ -1,9 +1,14 @@
 import { useAuthStore } from "../../store/authStore";
 import { redirect } from "@tanstack/react-router";
-import { getTokenRole } from "../../utils/token";
+import { getTokenRole, isTokenExpired } from "../../utils/token";
 
 export function checkUserRole() {
-  const token = useAuthStore.getState().token;
+  const { token, logout } = useAuthStore.getState();
+
+  if (!token || isTokenExpired(token)) {
+    logout();
+    throw redirect({ to: "/" });
+  }
 
   const role = getTokenRole(token);
 

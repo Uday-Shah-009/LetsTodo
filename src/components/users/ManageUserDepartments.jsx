@@ -16,28 +16,29 @@ export default function ManageUserDepartment() {
   const { data: departmentsData, isLoading: departmentsLoading } =
     useGetDepartments();
   const departments = departmentsData || [];
-  const user = users?.find((u) => u.id === Number(id));
+  const user = users?.find((u) => Number(u.id) === Number(id));
   const [departmentIds, setDepartmentIds] = useState([]);
-  const [prevUserId, setPrevUserId] = useState(null);
+  const [syncedUserId, setSyncedUserId] = useState(null);
 
-  if (user && user.id !== prevUserId) {
-    setPrevUserId(user.id);
-    setDepartmentIds(
-      user.departments.map((dept) =>
-        typeof dept === "object" ? dept.id : dept,
-      ),
-    );
+  if (user && Number(user.id) !== syncedUserId) {
+    setSyncedUserId(Number(user.id));
+    const depts = user.departments ?? user.department_ids ?? [];
+    const initialIds = (Array.isArray(depts) ? depts : [])
+      .map((d) => Number(typeof d === "object" ? d.id : d))
+      .filter((idVal) => !isNaN(idVal));
+
+    setDepartmentIds(initialIds);
   }
 
   const AssignDepartmentMutate = useAssignDepartments();
   const isSaving = AssignDepartmentMutate.isPending;
 
-
   const toggleDepartment = (departmentId) => {
+    const targetId = Number(departmentId);
     setDepartmentIds((prev) =>
-      prev.includes(departmentId)
-        ? prev.filter((id) => id !== departmentId)
-        : [...prev, departmentId],
+      prev.some((item) => Number(item) === targetId)
+        ? prev.filter((item) => Number(item) !== targetId)
+        : [...prev, targetId]
     );
   };
 
@@ -48,8 +49,9 @@ export default function ManageUserDepartment() {
     };
 
     AssignDepartmentMutate.mutate(payload, {
-      onSuccess: (res) =>
-        toast.success(res?.data?.message),
+      onSuccess: (res) => {
+        toast.success(res?.message || "Departments updated successfully");
+      },
     });
   };
 
@@ -145,7 +147,9 @@ export default function ManageUserDepartment() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {departments.map((department) => {
-                const isSelected = departmentIds.includes(department.id);
+                const isSelected = departmentIds.some(
+                  (deptId) => Number(deptId) === Number(department.id)
+                );
 
                 return (
                   <button

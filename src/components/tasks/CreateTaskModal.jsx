@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { Plus, Trash2 } from "lucide-react";
 import { useCreateTask, useGetMyTasks, useGetAllTasks, useAddSubTaskToExistingTask } from "../../app/Queries/Tasks.query";
@@ -30,7 +30,6 @@ export default function CreateTaskModal({
     control,
     handleSubmit,
     reset,
-    setValue,
     trigger,
     formState: { errors },
   } = useForm({
@@ -325,10 +324,15 @@ export default function CreateTaskModal({
                       </label>
                       <input
                         id={`subtasks.${index}.start_date`}
+                        type="date"
+                        min={new Date().toISOString().split("T")[0]}
                         {...register(`subtasks.${index}.start_date`, {
                           required: "Start date is required",
+                          validate: (val) =>
+                            !val ||
+                            val >= new Date().toISOString().split("T")[0] ||
+                            "Date cannot be in the past",
                         })}
-                        type="date"
                         className="w-full px-3 py-2 border rounded border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                       {errors?.subtasks?.[index]?.start_date && (

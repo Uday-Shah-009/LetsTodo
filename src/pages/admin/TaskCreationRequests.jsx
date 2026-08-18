@@ -20,10 +20,8 @@ export default function TaskRequestsPage() {
   const [selectedSubTaskRequest, setSelectedSubTaskRequest] = useState(null);
 
   const { data, isPending } = useGetTaskRequests(taskReqPage, taskReqPageSize);
-  const { data: subTaskData, isPending: isSubTaskPending } = useSubTaskUpdateAll(
-    subTaskReqPage,
-    subTaskReqPageSize
-  );
+  const { data: subTaskData, isPending: isSubTaskPending } =
+    useSubTaskUpdateAll(subTaskReqPage, subTaskReqPageSize);
 
   const getStatusStyle = (status) => {
     switch (status?.toLowerCase()) {
@@ -106,7 +104,10 @@ export default function TaskRequestsPage() {
 
             {data?.items && data.items.length > 0 && (
               <div className="flex items-center gap-2 text-sm text-[#667085] dark:text-[#94a3b8]">
-                <label htmlFor="taskReqPageSize" className="text-xs font-medium">
+                <label
+                  htmlFor="taskReqPageSize"
+                  className="text-xs font-medium"
+                >
                   Show:
                 </label>
                 <select
@@ -247,7 +248,9 @@ export default function TaskRequestsPage() {
               <div className="flex items-center justify-between gap-3 px-6 py-4 border-t border-zinc-200 dark:border-[#1e293b]">
                 <button
                   type="button"
-                  onClick={() => setTaskReqPage((prev) => Math.max(prev - 1, 1))}
+                  onClick={() =>
+                    setTaskReqPage((prev) => Math.max(prev - 1, 1))
+                  }
                   disabled={taskReqPage <= 1}
                   className="rounded-xl border border-zinc-200 dark:border-[#1e293b] px-4 py-2 text-xs font-medium transition hover:bg-zinc-100 dark:hover:bg-[#0b1730] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                 >
@@ -258,7 +261,11 @@ export default function TaskRequestsPage() {
                 </span>
                 <button
                   type="button"
-                  onClick={() => setTaskReqPage((prev) => Math.min(prev + 1, data?.total_pages ?? 1))}
+                  onClick={() =>
+                    setTaskReqPage((prev) =>
+                      Math.min(prev + 1, data?.total_pages ?? 1),
+                    )
+                  }
                   disabled={taskReqPage >= (data?.total_pages ?? 1)}
                   className="rounded-xl border border-zinc-200 dark:border-[#1e293b] px-4 py-2 text-xs font-medium transition hover:bg-zinc-100 dark:hover:bg-[#0b1730] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                 >
@@ -284,7 +291,10 @@ export default function TaskRequestsPage() {
 
             {subTaskData?.items && subTaskData.items.length > 0 && (
               <div className="flex items-center gap-2 text-sm text-[#667085] dark:text-[#94a3b8]">
-                <label htmlFor="subTaskReqPageSize" className="text-xs font-medium">
+                <label
+                  htmlFor="subTaskReqPageSize"
+                  className="text-xs font-medium"
+                >
                   Show:
                 </label>
                 <select
@@ -325,10 +335,10 @@ export default function TaskRequestsPage() {
                 font-medium
               "
             >
-              <div>Subtask ID</div>
+              <div>Task title</div>
+              <div>SubTask title</div>
               <div>Requested By</div>
               <div>Status</div>
-              <div>Note</div>
               <div className="text-center">Action</div>
             </div>
 
@@ -342,10 +352,10 @@ export default function TaskRequestsPage() {
                 </div>
               ) : (
                 subTaskData.items.map((request) => {
-                  const subtaskId = request?.sub_task_id;
+                  const subtaskTitle = request?.sub_task_title;
+                  const taskTitle = request?.task_title;
                   const requestedBy = request?.requested_by?.name;
                   const status = request?.status;
-                  const note = request?.requested_changes?.note || "-";
 
                   return (
                     <div
@@ -362,7 +372,11 @@ export default function TaskRequestsPage() {
                     >
                       {/* SUBTASK ID */}
                       <div className="font-medium text-[#101828] dark:text-white">
-                        Subtask #{subtaskId}
+                        {taskTitle}
+                      </div>
+
+                      <div className="font-medium text-[#101828] dark:text-white">
+                        {subtaskTitle}
                       </div>
 
                       {/* REQUESTED BY */}
@@ -380,11 +394,6 @@ export default function TaskRequestsPage() {
                         >
                           {status}
                         </span>
-                      </div>
-
-                      {/* NOTE */}
-                      <div className="text-[#101828] dark:text-white truncate">
-                        {note}
                       </div>
 
                       {/* ACTION */}
@@ -422,18 +431,25 @@ export default function TaskRequestsPage() {
               <div className="flex items-center justify-between gap-3 px-6 py-4 border-t border-zinc-200 dark:border-[#1e293b]">
                 <button
                   type="button"
-                  onClick={() => setSubTaskReqPage((prev) => Math.max(prev - 1, 1))}
+                  onClick={() =>
+                    setSubTaskReqPage((prev) => Math.max(prev - 1, 1))
+                  }
                   disabled={subTaskReqPage <= 1}
                   className="rounded-xl border border-zinc-200 dark:border-[#1e293b] px-4 py-2 text-xs font-medium transition hover:bg-zinc-100 dark:hover:bg-[#0b1730] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                 >
                   Previous
                 </button>
                 <span className="text-xs text-[#667085] dark:text-[#94a3b8]">
-                  Page {subTaskData?.page ?? subTaskReqPage} of {subTaskData?.total_pages ?? 1}
+                  Page {subTaskData?.page ?? subTaskReqPage} of{" "}
+                  {subTaskData?.total_pages ?? 1}
                 </span>
                 <button
                   type="button"
-                  onClick={() => setSubTaskReqPage((prev) => Math.min(prev + 1, subTaskData?.total_pages ?? 1))}
+                  onClick={() =>
+                    setSubTaskReqPage((prev) =>
+                      Math.min(prev + 1, subTaskData?.total_pages ?? 1),
+                    )
+                  }
                   disabled={subTaskReqPage >= (subTaskData?.total_pages ?? 1)}
                   className="rounded-xl border border-zinc-200 dark:border-[#1e293b] px-4 py-2 text-xs font-medium transition hover:bg-zinc-100 dark:hover:bg-[#0b1730] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                 >
