@@ -27,7 +27,7 @@ export default function UserSidebar({ sidebarOpen, setSidebarOpen }) {
     { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { name: "My Tasks", path: "/tasks", icon: CheckSquare },
     { name: "Add Task", path: "/add-task", icon: PlusCircle },
-    { name: "Timeline", path: "/timeline", icon: CalendarDays },
+    { name: "Timeline", path: "/timeline", icon: CalendarDays, desktopOnly: true },
     { name: "Settings", path: "/settings", icon: Settings },
   ];
 
@@ -65,7 +65,9 @@ export default function UserSidebar({ sidebarOpen, setSidebarOpen }) {
                 key={item.name}
                 to={item.path}
                 onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-colors ${
+                className={`items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-colors ${
+                  item.desktopOnly ? "hidden md:flex" : "flex"
+                } ${
                   active
                     ? "bg-blue-600 text-white shadow-sm"
                     : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"

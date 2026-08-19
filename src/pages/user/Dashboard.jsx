@@ -91,7 +91,7 @@ export default function Dashboard() {
             onClick={() => {
               navigate({ to: "/timeline" });
             }}
-            className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="hidden md:inline-flex px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-sm font-medium"
           >
             View Timeline
           </button>
