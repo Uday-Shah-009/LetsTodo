@@ -29,3 +29,9 @@ export const assignDepartments = async (payload) => {
   console.log(res.data);
   return res.data;
 };
+
+export const getUserDepartments = async () => {
+  const res = await axiosInstance.get("/user_departments");
+  return res.data;
+};
+

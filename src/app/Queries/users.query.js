@@ -1,10 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { AddUser, assignDepartments, ChangePassword, DeleteUser, getAllusers } from "../apis/users.api";
+import { AddUser, assignDepartments, ChangePassword, DeleteUser, getAllusers, getUserDepartments } from "../apis/users.api";
 import { toast } from "react-toastify";
 
 
 export const useGetAllUsers = () => {
   return useQuery({ queryKey: ["GetUsers"], queryFn: getAllusers });
+};
+
+export const useGetUserDepartments = () => {
+  return useQuery({
+    queryKey: ["getUserDepartments"],
+    queryFn: getUserDepartments,
+  });
 };
 
 export const useDeleteUsers = () => {

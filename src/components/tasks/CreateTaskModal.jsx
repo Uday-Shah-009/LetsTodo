@@ -152,9 +152,7 @@ export default function CreateTaskModal({
       description: data.description?.trim(),
       non_priority_flag: !!data.non_priority_flag,
       category_id: data.category_id ? Number(data.category_id) : null,
-      ...(isAdmin && {
-        department_id: data.department_id ? Number(data.department_id) : null,
-      }),
+      department_id: data.department_id ? Number(data.department_id) : null,
       sub_task_count: data.subtasks?.length || 0,
       sub_tasks: (data.subtasks || []).map((task) => ({
         title: task.title?.trim(),
@@ -573,31 +571,31 @@ export default function CreateTaskModal({
                     )}
                   </div>
 
-                  <div className="flex flex-col gap-1.5">
-                    <label htmlFor="category_id" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                      Category
-                    </label>
-                    <select
-                      id="category_id"
-                      {...register("category_id")}
-                      className="
-                        w-full px-3 py-2 rounded border
-                        border-zinc-300 dark:border-zinc-700
-                        bg-white dark:bg-zinc-900
-                        text-zinc-900 dark:text-white
-                        focus:outline-none focus:ring-2 focus:ring-blue-500
-                      "
-                    >
-                      <option value="">Select Category</option>
-                      {categories?.map((cat) => (
-                        <option key={cat.id} value={cat.id}>
-                          {cat.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <div className="flex flex-col gap-1.5">
+                      <label htmlFor="category_id" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                        Category
+                      </label>
+                      <select
+                        id="category_id"
+                        {...register("category_id")}
+                        className="
+                          w-full px-3 py-2 rounded border
+                          border-zinc-300 dark:border-zinc-700
+                          bg-white dark:bg-zinc-900
+                          text-zinc-900 dark:text-white
+                          focus:outline-none focus:ring-2 focus:ring-blue-500
+                        "
+                      >
+                        <option value="">Select Category</option>
+                        {categories?.map((cat) => (
+                          <option key={cat.id} value={cat.id}>
+                            {cat.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-                  {isAdmin && (
                     <div className="flex flex-col gap-1.5">
                       <label htmlFor="department_id" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                         Department
@@ -621,7 +619,7 @@ export default function CreateTaskModal({
                         ))}
                       </select>
                     </div>
-                  )}
+                  </div>
                 </div>
               ) : (
                 <div className="flex flex-col gap-2 pt-2">
