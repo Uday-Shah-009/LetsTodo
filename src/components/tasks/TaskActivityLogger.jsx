@@ -121,14 +121,21 @@ export default function CreateActivityModal({
             <label className="mb-1 block text-sm font-medium">Note</label>
 
             <textarea
-              rows={3}
+              rows={4}
               disabled={ActivityPending}
-              placeholder="Additional details..."
+              placeholder="Hours: Hours worked (required)
+Learning: What you learned by perfroming this task (required)
+Problem: Problem faced while performing this task (optional)
+              "
               {...register("note", {
                 maxLength: { value: 500, message: "Maximum 500 characters" },
+                required: "Note is required",
               })}
               className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 disabled:opacity-60"
             />
+            {errors.note && (
+              <p className="mt-1 text-sm text-red-500">{errors.note.message}</p>
+            )}
           </div>
 
           {/* Date */}

@@ -119,13 +119,25 @@ export default function TaskDetails() {
 
         <div className="p-5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 space-y-3">
           {taskData?.sub_tasks.map((item) => (
-            <label
+            <div
               key={item.id}
-              className="flex items-center justify-between gap-3"
+              className="flex items-center justify-between gap-3 border-b last:border-0 pb-3 last:pb-0 border-gray-100 dark:border-gray-800/60"
             >
-              <span>{item.title}</span>
+              <div className="flex flex-col">
+                <span className="font-medium text-gray-900 dark:text-gray-100">
+                  {item.title}
+                </span>
+                {item.assigned_to && (
+                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    Assigned to:{" "}
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
+                      {item.assigned_to.name || item.assigned_to}
+                    </span>
+                  </span>
+                )}
+              </div>
 
-              <div className="text-right text-xs text-gray-500 dark:text-gray-400">
+              <div className="text-right text-xs text-gray-500 dark:text-gray-400 shrink-0">
                 <div>
                   Start:{" "}
                   {item.start_date
@@ -139,7 +151,7 @@ export default function TaskDetails() {
                     : "None"}
                 </div>
               </div>
-            </label>
+            </div>
           ))}
         </div>
       </div>

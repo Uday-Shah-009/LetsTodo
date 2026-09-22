@@ -11,7 +11,10 @@ export const useLoginMutation = () => {
       loginState(data);
     },
     onError: (error) => {
-      toast.error(error?.response?.data?.message || "Invalid credentials");
+      toast.error(
+        error?.response?.data?.message ||
+        "Invalid credentials"
+      );
     },
   });
 };

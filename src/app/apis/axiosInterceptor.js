@@ -7,6 +7,11 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
+  
+  if (config.url?.endsWith("login")) {
+    return config;
+  }
+
   const token = useAuthStore.getState().token;
 
   if (token) {

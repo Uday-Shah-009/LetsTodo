@@ -28,6 +28,7 @@ export const createTask = async (payload) => {
 
 export const GetTaskbyId = async (task_id) => {
   const res = await axiosInstance.get(`tasks/${task_id}`);
+  console.log(res.data)
   return res.data;
 };
 
@@ -143,4 +144,4 @@ export const RejectSubTaskRequest = async ({ requestId, comment }) => {
 export const deleteTask = async (taskId) => {
   const res = await axiosInstance.delete(`tasks/${taskId}`);
   return res.data;
-};
+};

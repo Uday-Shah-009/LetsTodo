@@ -66,7 +66,6 @@ export default function CreateTaskModal({
   });
 
   const includePriority = useWatch({ control, name: "include_priority" });
-  const noPriority = useWatch({ control, name: "non_priority_flag" });
   const subtasksWatch = useWatch({ control, name: "subtasks" }) || [];
   const destinationOption = useWatch({ control, name: "destination_option" });
 
@@ -94,7 +93,7 @@ export default function CreateTaskModal({
   };
 
   const onSubmit = (data) => {
-    const isPriorityEnabled = (isAdmin || data.include_priority) && !data.non_priority_flag;
+    const isPriorityEnabled = isAdmin || data.include_priority;
 
     if (data.destination_option === "add_to_existing") {
       const taskId = Number(data.existing_task_id);
@@ -150,7 +149,7 @@ export default function CreateTaskModal({
     const payload = {
       title: data.title?.trim(),
       description: data.description?.trim(),
-      non_priority_flag: !!data.non_priority_flag,
+      non_priority_flag: false,
       category_id: data.category_id ? Number(data.category_id) : null,
       department_id: data.department_id ? Number(data.department_id) : null,
       sub_task_count: data.subtasks?.length || 0,
@@ -164,11 +163,10 @@ export default function CreateTaskModal({
         estimated_days: task.estimation_type === "days" ? Number(task.estimation_value || 0) : 0,
         estimated_hours: task.estimation_type === "hours" ? Number(task.estimation_value || 0) : 0,
         assigned_to: task.assigned_to ? Number(task.assigned_to) : null,
-        ...((isAdmin || data.include_priority) &&
-          !data.non_priority_flag && {
-            weightage_priority: Number(task.weightage_priority || 0),
-            subtask_priority: task.subtask_priority,
-          }),
+        ...(isPriorityEnabled && {
+          weightage_priority: Number(task.weightage_priority || 0),
+          subtask_priority: task.subtask_priority,
+        }),
       })),
     };
 
@@ -251,18 +249,14 @@ export default function CreateTaskModal({
         {/* STEP 1: Task Cards List */}
         {step === 1 && (
           <div className="space-y-6">
-            <div className="flex flex-col md:flex-row gap-4 p-4 bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-800 rounded-lg">
-              <label className="flex items-center gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-300 cursor-pointer">
-                <input type="checkbox" {...register("non_priority_flag")} />
-                <span>No admin review required ?</span>
-              </label>
-              {!isAdmin && (
+            {!isAdmin && (
+              <div className="flex flex-col md:flex-row gap-4 p-4 bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-800 rounded-lg">
                 <label className="flex items-center gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-300 cursor-pointer">
                   <input type="checkbox" {...register("include_priority")} />
                   <span>Add priority and weightage fields</span>
                 </label>
-              )}
-            </div>
+              </div>
+            )}
 
             <div className="space-y-6">
               {fields.map((field, index) => (
@@ -400,7 +394,7 @@ export default function CreateTaskModal({
                     </div>
                   </div>
 
-                  {((isAdmin || includePriority) && !noPriority) && (
+                  {(isAdmin || includePriority) && (
                     <div className="grid md:grid-cols-2 gap-3">
                       <div className="flex flex-col gap-1.5">
                         <label htmlFor={`subtasks.${index}.weightage_priority`} className="text-sm font-medium text-zinc-700 dark:text-zinc-300">

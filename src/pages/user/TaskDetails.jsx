@@ -54,7 +54,8 @@ export default function TaskDetails() {
     setIsActivityModalOpen(true);
   };
 
-  if (TaskisPending) return <LoadingSpinner message="Loading task details..." />;
+  if (TaskisPending)
+    return <LoadingSpinner message="Loading task details..." />;
 
   const currentUserId =
     user?.id ??
@@ -199,25 +200,39 @@ export default function TaskDetails() {
                     </div>
                   </label>
 
-                  <button
-                    type="button"
-                    disabled={!canModify}
-                    onClick={() => canModify && handleOpenActivityModal(item)}
-                    className={`px-3 py-1.5 text-sm rounded-lg font-medium transition-colors ${
-                      isCompleted
-                        ? "bg-gray-300 dark:bg-gray-800 text-gray-500 cursor-not-allowed"
-                        : !isAssignedToCurrentUser
-                          ? "bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed"
-                          : "bg-blue-600 hover:bg-blue-700 text-white"
-                    }`}
-                    title={
-                      !isAssignedToCurrentUser
-                        ? `Only ${item.assigned_to?.name || "the assigned user"} can log activity`
-                        : ""
-                    }
-                  >
-                    {isCompleted ? "Completed" : "+ Add Activity"}
-                  </button>
+                  <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 shrink-0">
+                    {(item.start_date || item.end_date) && (
+                      <div className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800/60 px-2.5 py-1 rounded-md border border-gray-200/60 dark:border-gray-700/50 whitespace-nowrap">
+                        {item.start_date
+                          ? new Date(item.start_date).toLocaleDateString("en-IN")
+                          : "N/A"}{" "}
+                        -{" "}
+                        {item.end_date
+                          ? new Date(item.end_date).toLocaleDateString("en-IN")
+                          : "N/A"}
+                      </div>
+                    )}
+
+                    <button
+                      type="button"
+                      disabled={!canModify}
+                      onClick={() => canModify && handleOpenActivityModal(item)}
+                      className={`px-3 py-1.5 text-sm rounded-lg font-medium transition-colors ${
+                        isCompleted
+                          ? "bg-gray-300 dark:bg-gray-800 text-gray-500 cursor-not-allowed"
+                          : !isAssignedToCurrentUser
+                            ? "bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed"
+                            : "bg-blue-600 hover:bg-blue-700 text-white"
+                      }`}
+                      title={
+                        !isAssignedToCurrentUser
+                          ? `Only ${item.assigned_to?.name || "the assigned user"} can log activity`
+                          : ""
+                      }
+                    >
+                      {isCompleted ? "Completed" : "+ Add Activity"}
+                    </button>
+                  </div>
                 </div>
               </div>
             );
