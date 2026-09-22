@@ -139,3 +139,8 @@ export const RejectSubTaskRequest = async ({ requestId, comment }) => {
   );
   return res.data;
 };
+
+export const deleteTask = async (taskId) => {
+  const res = await axiosInstance.delete(`tasks/${taskId}`);
+  return res.data;
+};

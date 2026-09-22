@@ -4,6 +4,7 @@ import {
   ApproveSubTaskRequest,
   ApproveTask,
   createTask,
+  deleteTask,
   GetAllTasks,
   GetMyTasks,
   getTaskActivities,
@@ -252,3 +253,19 @@ export const useRejectSubTaskRequest = () => {
     },
   });
 };
+
+export const useDeleteTask = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (taskId) => deleteTask(taskId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GetAllTasks"] });
+      queryClient.invalidateQueries({ queryKey: ["GetMytasks"] });
+      toast.success("Task deleted successfully");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Something Went Wrong");
+    },
+  });
+};
+
