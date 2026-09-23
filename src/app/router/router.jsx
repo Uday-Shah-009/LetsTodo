@@ -2,13 +2,11 @@ import {
   createRootRoute,
   createRoute,
   createRouter,
+  lazyRouteComponent,
 } from "@tanstack/react-router"
-
-import Login from "../../pages/Login"
 
 import { userRoutes } from "./User.router"
 import { adminRoutes } from "./Admin.router"
-import ChangePasswordUI from "../../pages/ChangePassword"
 import { requireAuth } from "./requireAuth"
 
 export const rootRoute = createRootRoute()
@@ -16,13 +14,13 @@ export const rootRoute = createRootRoute()
 const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
-  component: Login,
+  component: lazyRouteComponent(() => import("../../pages/Login")),
 })
 
 const changePasswordRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/change-password",
-  component: ChangePasswordUI,
+  component: lazyRouteComponent(() => import("../../pages/ChangePassword")),
   beforeLoad: requireAuth
 })
 

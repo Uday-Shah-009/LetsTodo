@@ -52,8 +52,8 @@ export default function Dashboard() {
       </div>
 
       {/* Recent Tasks */}
-      <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
-        <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Recent Tasks</h2>
+      <div className="p-6 rounded-xl border border-gray-200 dark:border-[#1e293b] bg-white dark:bg-[#0b1329] shadow-sm">
+        <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-slate-100">Recent Tasks</h2>
 
         <div className="space-y-3">
           {tasks.length === 0 ? (
@@ -63,10 +63,10 @@ export default function Dashboard() {
               <div
                 key={task.id}
                 onClick={() => navigate({ to: `/tasks/${task.id}` })}
-                className="flex justify-between items-center p-3 rounded-lg border border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 transition cursor-pointer"
+                className="flex justify-between items-center p-3 rounded-lg border border-gray-100 dark:border-[#1e293b]/70 hover:bg-gray-50 dark:hover:bg-[#162342] transition cursor-pointer"
               >
-                <span className="font-medium text-sm text-gray-800 dark:text-gray-200">{task.title}</span>
-                <span className="text-xs text-blue-500 font-medium">View →</span>
+                <span className="font-medium text-sm text-gray-800 dark:text-slate-200">{task.title}</span>
+                <span className="text-xs text-blue-500 dark:text-blue-400 font-medium">View →</span>
               </div>
             ))
           )}
@@ -74,15 +74,15 @@ export default function Dashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-        <h2 className="text-lg font-semibold mb-4">Quick Actions</h2>
+      <div className="p-6 rounded-xl border border-gray-200 dark:border-[#1e293b] bg-white dark:bg-[#0b1329] shadow-sm">
+        <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-slate-100">Quick Actions</h2>
 
         <div className="flex gap-4 flex-wrap">
           <button
             onClick={() => {
               navigate({ to: "/add-task" });
             }}
-            className="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
+            className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-medium text-sm transition cursor-pointer shadow-xs"
           >
             + Add Task
           </button>
@@ -91,7 +91,7 @@ export default function Dashboard() {
             onClick={() => {
               navigate({ to: "/timeline" });
             }}
-            className="hidden md:inline-flex px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-sm font-medium"
+            className="hidden md:inline-flex px-4 py-2 rounded-lg border border-gray-300 dark:border-[#1e293b] text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-[#162342] text-sm font-medium transition cursor-pointer"
           >
             View Timeline
           </button>

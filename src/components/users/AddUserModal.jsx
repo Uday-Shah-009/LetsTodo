@@ -18,13 +18,13 @@ export default function AddUserModal({ closeModal }) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/40">
-      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6 w-full max-w-md">
-        <h2 className="text-lg font-semibold mb-4">Add User</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="bg-white dark:bg-[#0e1626] border border-gray-200 dark:border-[#263347] rounded-xl p-6 w-full max-w-md shadow-2xl">
+        <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-slate-100">Add User</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-1">
-            <label htmlFor="user-modal-username" className="block text-xs font-medium text-gray-700 dark:text-gray-300">Username *</label>
+            <label htmlFor="user-modal-username" className="block text-xs font-medium text-gray-700 dark:text-slate-300">Username *</label>
             <input
               id="user-modal-username"
               type="text"
@@ -38,7 +38,7 @@ export default function AddUserModal({ closeModal }) {
                   message: "Only letters, numbers and underscores",
                 },
               })}
-              className="w-full p-2.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2.5 rounded-lg border border-gray-300 dark:border-[#263347] bg-white dark:bg-[#182232] text-gray-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.username && (
               <p className="text-xs text-red-500">{errors.username.message}</p>
@@ -46,7 +46,7 @@ export default function AddUserModal({ closeModal }) {
           </div>
 
           <div className="space-y-1">
-            <label htmlFor="user-modal-email" className="block text-xs font-medium text-gray-700 dark:text-gray-300">Email Address *</label>
+            <label htmlFor="user-modal-email" className="block text-xs font-medium text-gray-700 dark:text-slate-300">Email Address *</label>
             <input
               id="user-modal-email"
               type="email"
@@ -58,7 +58,7 @@ export default function AddUserModal({ closeModal }) {
                   message: "Enter a valid email address",
                 },
               })}
-              className="w-full p-2.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2.5 rounded-lg border border-gray-300 dark:border-[#263347] bg-white dark:bg-[#182232] text-gray-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.email && (
               <p className="text-xs text-red-500">{errors.email.message}</p>
@@ -66,7 +66,7 @@ export default function AddUserModal({ closeModal }) {
           </div>
 
           <div className="space-y-1">
-            <label htmlFor="user-modal-password" className="block text-xs font-medium text-gray-700 dark:text-gray-300">Password *</label>
+            <label htmlFor="user-modal-password" className="block text-xs font-medium text-gray-700 dark:text-slate-300">Password *</label>
             <input
               id="user-modal-password"
               type="password"
@@ -79,25 +79,25 @@ export default function AddUserModal({ closeModal }) {
                   message: "Must include at least one letter and one number",
                 },
               })}
-              className="w-full p-2.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2.5 rounded-lg border border-gray-300 dark:border-[#263347] bg-white dark:bg-[#182232] text-gray-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.password && (
               <p className="text-xs text-red-500">{errors.password.message}</p>
             )}
           </div>
 
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-2 pt-2">
             <button
               type="button"
               onClick={closeModal}
-              className="px-3 py-1 border border-gray-300 dark:border-gray-700 rounded-md"
+              className="px-4 py-2 border border-gray-300 dark:border-[#263347] text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-[#182232] rounded-lg text-xs font-medium transition cursor-pointer"
             >
               Cancel
             </button>
 
             <button
               type="submit"
-              className="px-3 py-1 bg-blue-500 text-white rounded-md"
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition cursor-pointer"
               disabled={AddUserMutate.isPending}
             >
               {AddUserMutate.isPending ? "Creating..." : "Create"}

@@ -131,22 +131,24 @@ export default function TaskRequestsPage() {
           {/* TABLE */}
           <div
             className="
-              bg-white dark:bg-[#09142a]
-              border border-zinc-200 dark:border-[#1e293b]
-              rounded-3xl
+              bg-white dark:bg-[#0e1626]
+              border border-zinc-200 dark:border-[#263347]
+              rounded-xl
               overflow-hidden
               transition-colors duration-300
+              shadow-sm
             "
           >
             {/* TABLE HEADER */}
             <div
               className="
                 grid grid-cols-5 gap-4
-                px-6 py-5
-                border-b border-zinc-200 dark:border-[#1e293b]
-                text-sm
-                text-[#667085] dark:text-[#94a3b8]
-                font-medium
+                px-6 py-2.5
+                border-b border-zinc-200 dark:border-[#263347]
+                bg-gray-50/80 dark:bg-[#182232]
+                text-xs uppercase tracking-wider
+                text-gray-800 dark:text-slate-200
+                font-semibold
               "
             >
               <div>Task Name</div>
@@ -159,8 +161,8 @@ export default function TaskRequestsPage() {
             {/* TABLE BODY */}
             <div>
               {data?.items?.length === 0 ? (
-                <div className="flex items-center justify-center py-20">
-                  <p className="text-[#667085] dark:text-[#94a3b8]">
+                <div className="flex items-center justify-center py-12">
+                  <p className="text-[#667085] dark:text-[#94a3b8] text-sm">
                     No task requests found.
                   </p>
                 </div>
@@ -178,21 +180,23 @@ export default function TaskRequestsPage() {
                       key={request.id}
                       className="
                         grid grid-cols-5 gap-4
-                        px-6 py-5
-                        border-b border-zinc-200 dark:border-[#1e293b]
+                        px-6 py-2.5
+                        border-b border-zinc-200 dark:border-[#263347]/70
                         last:border-none
                         items-center
-                        hover:bg-zinc-100 dark:hover:bg-[#0b1730]
+                        bg-white dark:bg-[#0e1626]
+                        hover:bg-zinc-100 dark:hover:bg-[#182232]
                         transition-all duration-200
+                        text-sm
                       "
                     >
                       {/* TASK NAME */}
-                      <div className="font-medium text-[#101828] dark:text-white">
+                      <div className="font-medium text-[#101828] dark:text-slate-100">
                         {taskName}
                       </div>
 
                       {/* REQUESTED BY */}
-                      <div className="text-[#667085] dark:text-[#94a3b8]">
+                      <div className="text-gray-600 dark:text-slate-300">
                         {requestedBy}
                       </div>
 
@@ -200,7 +204,7 @@ export default function TaskRequestsPage() {
                       <div>
                         <span
                           className={`
-                            px-3 py-1 rounded-xl text-sm capitalize
+                            px-2.5 py-0.5 rounded-lg text-xs capitalize inline-block
                             ${getStatusStyle(status)}
                           `}
                         >
@@ -221,10 +225,10 @@ export default function TaskRequestsPage() {
                           className={`
                             text-white
                             transition-all duration-200
-                            rounded-2xl
-                            px-4 py-2
-                            flex items-center gap-2
-                            text-sm font-medium
+                            rounded-xl
+                            px-3 py-1.5
+                            flex items-center gap-1.5
+                            text-xs font-medium
                             shadow-sm
                             ${
                               status?.toLowerCase() !== "pending"
@@ -233,7 +237,7 @@ export default function TaskRequestsPage() {
                             }
                           `}
                         >
-                          <Eye className="w-4 h-4" />
+                          <Eye className="w-3.5 h-3.5" />
                           Review
                         </button>
                       </div>
@@ -245,18 +249,18 @@ export default function TaskRequestsPage() {
 
             {/* TASK REQUESTS PAGINATION FOOTER */}
             {data?.total_pages > 1 && (
-              <div className="flex items-center justify-between gap-3 px-6 py-4 border-t border-zinc-200 dark:border-[#1e293b]">
+              <div className="flex items-center justify-between gap-3 px-6 py-3 border-t border-zinc-200 dark:border-[#263347]">
                 <button
                   type="button"
                   onClick={() =>
                     setTaskReqPage((prev) => Math.max(prev - 1, 1))
                   }
                   disabled={taskReqPage <= 1}
-                  className="rounded-xl border border-zinc-200 dark:border-[#1e293b] px-4 py-2 text-xs font-medium transition hover:bg-zinc-100 dark:hover:bg-[#0b1730] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                  className="rounded-xl border border-zinc-200 dark:border-[#263347] px-3 py-1.5 text-xs font-medium dark:text-slate-300 transition hover:bg-zinc-100 dark:hover:bg-[#182232] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                 >
                   Previous
                 </button>
-                <span className="text-xs text-[#667085] dark:text-[#94a3b8]">
+                <span className="text-xs text-[#667085] dark:text-slate-400">
                   Page {data?.page ?? taskReqPage} of {data?.total_pages ?? 1}
                 </span>
                 <button
@@ -267,7 +271,7 @@ export default function TaskRequestsPage() {
                     )
                   }
                   disabled={taskReqPage >= (data?.total_pages ?? 1)}
-                  className="rounded-xl border border-zinc-200 dark:border-[#1e293b] px-4 py-2 text-xs font-medium transition hover:bg-zinc-100 dark:hover:bg-[#0b1730] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                  className="rounded-xl border border-zinc-200 dark:border-[#263347] px-3 py-1.5 text-xs font-medium dark:text-slate-300 transition hover:bg-zinc-100 dark:hover:bg-[#182232] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                 >
                   Next
                 </button>
@@ -280,17 +284,17 @@ export default function TaskRequestsPage() {
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight">
+              <h2 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-slate-100">
                 Subtask Update Requests
               </h2>
 
-              <p className="text-[#667085] dark:text-[#94a3b8] mt-2">
+              <p className="text-[#667085] dark:text-slate-400 mt-2">
                 Review all subtask update requests.
               </p>
             </div>
 
             {subTaskData?.items && subTaskData.items.length > 0 && (
-              <div className="flex items-center gap-2 text-sm text-[#667085] dark:text-[#94a3b8]">
+              <div className="flex items-center gap-2 text-sm text-[#667085] dark:text-slate-400">
                 <label
                   htmlFor="subTaskReqPageSize"
                   className="text-xs font-medium"
@@ -304,7 +308,7 @@ export default function TaskRequestsPage() {
                     setSubTaskReqPageSize(Number(e.target.value));
                     setSubTaskReqPage(1);
                   }}
-                  className="rounded-xl border border-zinc-200 dark:border-[#1e293b] bg-white dark:bg-[#09142a] px-3 py-1.5 text-xs text-[#101828] dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                  className="rounded-xl border border-zinc-200 dark:border-[#263347] bg-white dark:bg-[#182232] px-3 py-1.5 text-xs text-[#101828] dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
                 >
                   <option value={5}>5</option>
                   <option value={10}>10</option>
@@ -317,22 +321,24 @@ export default function TaskRequestsPage() {
 
           <div
             className="
-              bg-white dark:bg-[#09142a]
-              border border-zinc-200 dark:border-[#1e293b]
-              rounded-3xl
+              bg-white dark:bg-[#0e1626]
+              border border-zinc-200 dark:border-[#263347]
+              rounded-xl
               overflow-hidden
               transition-colors duration-300
+              shadow-sm
             "
           >
             {/* TABLE HEADER */}
             <div
               className="
                 grid grid-cols-5 gap-4
-                px-6 py-5
-                border-b border-zinc-200 dark:border-[#1e293b]
-                text-sm
-                text-[#667085] dark:text-[#94a3b8]
-                font-medium
+                px-6 py-2.5
+                border-b border-zinc-200 dark:border-[#263347]
+                bg-gray-50/80 dark:bg-[#182232]
+                text-xs uppercase tracking-wider
+                text-gray-800 dark:text-slate-200
+                font-semibold
               "
             >
               <div>Task title</div>
@@ -345,8 +351,8 @@ export default function TaskRequestsPage() {
             {/* TABLE BODY */}
             <div>
               {!subTaskData?.items || subTaskData.items.length === 0 ? (
-                <div className="flex items-center justify-center py-20">
-                  <p className="text-[#667085] dark:text-[#94a3b8]">
+                <div className="flex items-center justify-center py-12">
+                  <p className="text-[#667085] dark:text-slate-400 text-sm">
                     No subtask update requests found.
                   </p>
                 </div>
@@ -362,25 +368,27 @@ export default function TaskRequestsPage() {
                       key={request.id}
                       className="
                         grid grid-cols-5 gap-4
-                        px-6 py-5
-                        border-b border-zinc-200 dark:border-[#1e293b]
+                        px-6 py-2.5
+                        border-b border-zinc-200 dark:border-[#263347]/70
                         last:border-none
                         items-center
-                        hover:bg-zinc-100 dark:hover:bg-[#0b1730]
+                        bg-white dark:bg-[#0e1626]
+                        hover:bg-zinc-100 dark:hover:bg-[#182232]
                         transition-all duration-200
+                        text-sm
                       "
                     >
                       {/* SUBTASK ID */}
-                      <div className="font-medium text-[#101828] dark:text-white">
+                      <div className="font-medium text-[#101828] dark:text-slate-100">
                         {taskTitle}
                       </div>
 
-                      <div className="font-medium text-[#101828] dark:text-white">
+                      <div className="font-medium text-[#101828] dark:text-slate-100">
                         {subtaskTitle}
                       </div>
 
                       {/* REQUESTED BY */}
-                      <div className="text-[#667085] dark:text-[#94a3b8]">
+                      <div className="text-gray-600 dark:text-slate-300">
                         {requestedBy}
                       </div>
 
@@ -388,7 +396,7 @@ export default function TaskRequestsPage() {
                       <div>
                         <span
                           className={`
-                            px-3 py-1 rounded-xl text-sm capitalize
+                            px-2.5 py-0.5 rounded-lg text-xs capitalize inline-block
                             ${getStatusStyle(status)}
                           `}
                         >
@@ -404,19 +412,19 @@ export default function TaskRequestsPage() {
                           className={`
                             text-white
                             transition-all duration-200
-                            rounded-2xl
-                            px-4 py-2
-                            flex items-center gap-2
-                            text-sm font-medium
+                            rounded-xl
+                            px-3 py-1.5
+                            flex items-center gap-1.5
+                            text-xs font-medium
                             shadow-sm
                             ${
                               status?.toLowerCase() !== "pending"
                                 ? "bg-gray-400 cursor-not-allowed opacity-60"
-                                : "bg-blue-500 hover:bg-blue-600 cursor-pointer"
+                                : "bg-blue-600 hover:bg-blue-700 cursor-pointer"
                             }
                           `}
                         >
-                          <Eye className="w-4 h-4" />
+                          <Eye className="w-3.5 h-3.5" />
                           Review
                         </button>
                       </div>
@@ -428,18 +436,18 @@ export default function TaskRequestsPage() {
 
             {/* SUBTASK UPDATE REQUESTS PAGINATION FOOTER */}
             {subTaskData?.total_pages > 1 && (
-              <div className="flex items-center justify-between gap-3 px-6 py-4 border-t border-zinc-200 dark:border-[#1e293b]">
+              <div className="flex items-center justify-between gap-3 px-6 py-3 border-t border-zinc-200 dark:border-[#263347]">
                 <button
                   type="button"
                   onClick={() =>
                     setSubTaskReqPage((prev) => Math.max(prev - 1, 1))
                   }
                   disabled={subTaskReqPage <= 1}
-                  className="rounded-xl border border-zinc-200 dark:border-[#1e293b] px-4 py-2 text-xs font-medium transition hover:bg-zinc-100 dark:hover:bg-[#0b1730] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                  className="rounded-xl border border-zinc-200 dark:border-[#263347] px-3 py-1.5 text-xs font-medium dark:text-slate-300 transition hover:bg-zinc-100 dark:hover:bg-[#182232] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                 >
                   Previous
                 </button>
-                <span className="text-xs text-[#667085] dark:text-[#94a3b8]">
+                <span className="text-xs text-[#667085] dark:text-slate-400">
                   Page {subTaskData?.page ?? subTaskReqPage} of{" "}
                   {subTaskData?.total_pages ?? 1}
                 </span>
@@ -451,7 +459,7 @@ export default function TaskRequestsPage() {
                     )
                   }
                   disabled={subTaskReqPage >= (subTaskData?.total_pages ?? 1)}
-                  className="rounded-xl border border-zinc-200 dark:border-[#1e293b] px-4 py-2 text-xs font-medium transition hover:bg-zinc-100 dark:hover:bg-[#0b1730] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                  className="rounded-xl border border-zinc-200 dark:border-[#263347] px-3 py-1.5 text-xs font-medium dark:text-slate-300 transition hover:bg-zinc-100 dark:hover:bg-[#182232] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                 >
                   Next
                 </button>

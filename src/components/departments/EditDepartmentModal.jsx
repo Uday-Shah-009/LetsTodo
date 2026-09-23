@@ -59,21 +59,21 @@ export default function EditDepartmentModal({
         onClick={(e) => e.stopPropagation()}
         className="
           relative z-10 w-full max-w-md
-          rounded-3xl border
-          border-slate-200 dark:border-white/10
-          bg-white dark:bg-[#07152F]
+          rounded-xl border
+          border-slate-200 dark:border-[#263347]
+          bg-white dark:bg-[#0e1626]
           p-6 shadow-2xl
           animate-[fadeIn_0.2s_ease-out]
         "
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-4 mb-5">
+        <div className="flex items-center justify-between border-b border-slate-200 dark:border-[#263347] pb-4 mb-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400">
+            <div className="w-10 h-10 rounded-2xl bg-blue-100 dark:bg-blue-950/60 flex items-center justify-center text-blue-600 dark:text-blue-400">
               <Building2 className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
+              <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
                 Edit Department
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -88,8 +88,8 @@ export default function EditDepartmentModal({
             aria-label="Close modal"
             className="
               w-9 h-9 rounded-xl
-              bg-slate-100 dark:bg-white/5
-              hover:bg-slate-200 dark:hover:bg-white/10
+              bg-slate-100 dark:bg-[#182232]
+              hover:bg-slate-200 dark:hover:bg-slate-800
               text-slate-500 dark:text-slate-400
               flex items-center justify-center
               transition cursor-pointer
@@ -142,10 +142,10 @@ export default function EditDepartmentModal({
                 focus:outline-none
                 focus:ring-2
                 focus:ring-blue-500/20
-                dark:border-white/10
-                dark:bg-[#0B1D3D]
-                dark:text-white
-                dark:placeholder:text-slate-500
+                dark:border-[#263347]
+                dark:bg-[#182232]
+                dark:text-slate-100
+                dark:placeholder:text-slate-400
                 transition-all
               "
             />

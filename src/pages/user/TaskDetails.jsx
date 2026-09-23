@@ -204,7 +204,9 @@ export default function TaskDetails() {
                     {(item.start_date || item.end_date) && (
                       <div className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800/60 px-2.5 py-1 rounded-md border border-gray-200/60 dark:border-gray-700/50 whitespace-nowrap">
                         {item.start_date
-                          ? new Date(item.start_date).toLocaleDateString("en-IN")
+                          ? new Date(item.start_date).toLocaleDateString(
+                              "en-IN",
+                            )
                           : "N/A"}{" "}
                         -{" "}
                         {item.end_date

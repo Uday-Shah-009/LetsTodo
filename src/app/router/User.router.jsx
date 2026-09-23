@@ -1,17 +1,8 @@
 import React from "react"
-import { createRoute } from "@tanstack/react-router"
+import { createRoute, lazyRouteComponent } from "@tanstack/react-router"
 import UserLayout from "../../layout/UserLayout"
 import { rootRoute } from "./router"
 import { requireAuth } from "./requireAuth"
-
-/* User Pages Statically Imported */
-import Dashboard from "../../pages/user/Dashboard"
-import MyTasks from "../../pages/user/Tasks"
-import AddTask from "../../pages/user/AddTask"
-import Settings from "../../pages/user/Settings"
-import Timeline from "../../pages/user/Timeline"
-import TaskDetails from "../../pages/user/TaskDetails"
-import ReviseTaskPage from "../../pages/ReviseTaskPage"
 
 /* User Layout */
 
@@ -27,49 +18,49 @@ export const userLayoutRoute = createRoute({
 export const dashboardRoute = createRoute({
   getParentRoute: () => userLayoutRoute,
   path: "/dashboard",
-  component: Dashboard,
+  component: lazyRouteComponent(() => import("../../pages/user/Dashboard")),
   beforeLoad: requireAuth
 })
 
 export const timelineRoute = createRoute({
   getParentRoute: () => userLayoutRoute,
   path: "/timeline",
-  component: Timeline,
+  component: lazyRouteComponent(() => import("../../pages/user/Timeline")),
   beforeLoad: requireAuth
 })
 
 export const tasksRoute = createRoute({
   getParentRoute: () => userLayoutRoute,
   path: "/tasks",
-  component: MyTasks,
+  component: lazyRouteComponent(() => import("../../pages/user/Tasks")),
   beforeLoad: requireAuth
 })
 
 export const taskDetailsRoute = createRoute({
   getParentRoute: () => userLayoutRoute,
   path: "/tasks/$taskId",
-  component: TaskDetails,
+  component: lazyRouteComponent(() => import("../../pages/user/TaskDetails")),
   beforeLoad: requireAuth
 })
 
 export const userReviseTaskRoute = createRoute({
   getParentRoute: () => userLayoutRoute,
   path: "/tasks/$taskId/revise",
-  component: ReviseTaskPage,
+  component: lazyRouteComponent(() => import("../../pages/ReviseTaskPage")),
   beforeLoad: requireAuth
 })
 
 export const addTaskRoute = createRoute({
   getParentRoute: () => userLayoutRoute,
   path: "/add-task",
-  component: AddTask,
+  component: lazyRouteComponent(() => import("../../pages/user/AddTask")),
   beforeLoad: requireAuth
 })
 
 export const settingsRoute = createRoute({
   getParentRoute: () => userLayoutRoute,
   path: "/settings",
-  component: Settings,
+  component: lazyRouteComponent(() => import("../../pages/user/Settings")),
   beforeLoad: requireAuth
 })
 

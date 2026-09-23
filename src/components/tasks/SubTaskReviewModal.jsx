@@ -85,30 +85,30 @@ export default function SubTaskReviewModal({ open, onClose, request }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="w-full max-w-2xl bg-white dark:bg-[#09142a] border border-zinc-200 dark:border-[#1e293b] rounded-3xl overflow-hidden shadow-2xl">
+      <div className="w-full max-w-2xl bg-white dark:bg-[#0e1626] border border-zinc-200 dark:border-[#263347] rounded-xl overflow-hidden shadow-2xl">
         {/* HEADER */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-zinc-200 dark:border-[#1e293b]">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-zinc-200 dark:border-[#263347] bg-gray-50/80 dark:bg-[#182232]">
           <div>
-            <h2 className="text-2xl font-semibold text-[#101828] dark:text-white">
+            <h2 className="text-2xl font-semibold text-[#101828] dark:text-slate-100">
               Review Subtask Update Request
             </h2>
-            <p className="text-[#667085] dark:text-[#94a3b8] mt-1 text-sm">
+            <p className="text-[#667085] dark:text-slate-400 mt-1 text-sm">
               Review and set priority fields for Subtask #{request?.sub_task_id}.
             </p>
           </div>
 
           <button
             onClick={onClose}
-            className="w-11 h-11 rounded-2xl bg-zinc-100 dark:bg-[#0b1730] hover:bg-zinc-200 dark:hover:bg-[#13203b] flex items-center justify-center transition cursor-pointer"
+            className="w-11 h-11 rounded-xl bg-zinc-100 dark:bg-[#0e1626] hover:bg-zinc-200 dark:hover:bg-slate-800 flex items-center justify-center transition cursor-pointer"
           >
-            <X className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+            <X className="w-5 h-5 text-gray-700 dark:text-slate-300" />
           </button>
         </div>
 
         {/* CONTENT */}
         <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
           {/* REQUEST DETAILS */}
-          <div className="bg-zinc-50 dark:bg-[#0b1730] border border-zinc-200 dark:border-[#1e293b] rounded-2xl p-5 space-y-4">
+          <div className="bg-zinc-50 dark:bg-[#182232] border border-zinc-200 dark:border-[#263347] rounded-xl p-5 space-y-4">
             <div className="flex items-center gap-2 mb-2">
               <ClipboardList className="w-5 h-5 text-[#667085] dark:text-[#94a3b8]" />
               <h3 className="text-base font-semibold text-[#101828] dark:text-white">

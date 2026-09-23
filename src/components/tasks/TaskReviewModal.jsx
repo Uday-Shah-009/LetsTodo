@@ -109,9 +109,9 @@ export default function TaskReviewModal({ open, onClose, task }) {
       <div
         className="
           w-full max-w-4xl
-          bg-white dark:bg-[#09142a]
-          border border-zinc-200 dark:border-[#1e293b]
-          rounded-3xl
+          bg-white dark:bg-[#0e1626]
+          border border-zinc-200 dark:border-[#263347]
+          rounded-xl
           overflow-hidden
           shadow-2xl
         "
@@ -121,15 +121,16 @@ export default function TaskReviewModal({ open, onClose, task }) {
           className="
             flex items-center justify-between
             px-6 py-5
-            border-b border-zinc-200 dark:border-[#1e293b]
+            border-b border-zinc-200 dark:border-[#263347]
+            bg-gray-50/80 dark:bg-[#182232]
           "
         >
           <div>
-            <h2 className="text-2xl font-semibold text-[#101828] dark:text-white">
+            <h2 className="text-2xl font-semibold text-[#101828] dark:text-slate-100">
               Review Task Request
             </h2>
 
-            <p className="text-[#667085] dark:text-[#94a3b8] mt-1">
+            <p className="text-[#667085] dark:text-slate-400 mt-1">
               Review and take action on this task request.
             </p>
           </div>
@@ -137,13 +138,13 @@ export default function TaskReviewModal({ open, onClose, task }) {
           <button
             onClick={onClose}
             className="
-              w-11 h-11 rounded-2xl
-              bg-zinc-100 dark:bg-[#0b1730]
-              hover:bg-zinc-200 dark:hover:bg-[#13203b]
+              w-11 h-11 rounded-xl
+              bg-zinc-100 dark:bg-[#0e1626]
+              hover:bg-zinc-200 dark:hover:bg-slate-800
               flex items-center justify-center
             "
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 text-gray-700 dark:text-slate-300" />
           </button>
         </div>
 
@@ -152,7 +153,7 @@ export default function TaskReviewModal({ open, onClose, task }) {
           {/* LEFT SIDE */}
           <div className="space-y-6">
             {/* TASK DETAILS */}
-            <div className="bg-zinc-50 dark:bg-[#0b1730] border border-zinc-200 dark:border-[#1e293b] rounded-3xl p-5">
+            <div className="bg-zinc-50 dark:bg-[#182232] border border-zinc-200 dark:border-[#263347] rounded-xl p-5">
               <div className="flex items-center gap-2 mb-5">
                 <ClipboardList className="w-5 h-5 text-[#667085] dark:text-[#94a3b8]" />
                 <h3 className="text-lg font-medium text-[#101828] dark:text-white">

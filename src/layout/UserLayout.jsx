@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { Outlet, useLocation, useNavigate } from "@tanstack/react-router"
 import UserSidebar from "../components/Sidebar/UserSidebar"
 import { useAuthStore } from "../store/authStore"
 import { useUser } from "../utils/token"
 import { requireAuth } from "../app/router/requireAuth"
 import { Menu, User, ChevronRight } from "lucide-react"
+import LoadingSpinner from "../components/ui/LoadingSpinner"
 
 export default function UserLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -75,7 +76,9 @@ export default function UserLayout() {
 
         {/* Page Content */}
         <main className="flex-1 overflow-y-auto p-4 md:p-6">
-          <Outlet />
+          <Suspense fallback={<LoadingSpinner message="Loading user view..." fullPage={false} />}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
     </div>

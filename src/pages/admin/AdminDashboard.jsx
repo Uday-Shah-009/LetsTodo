@@ -64,13 +64,13 @@ export default function AdminDashboard() {
           return (
             <div
               key={stat.title}
-              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 shadow-sm transition-all hover:border-gray-300 dark:hover:border-gray-700 flex items-center justify-between"
+              className="bg-white dark:bg-[#0e1626] border border-gray-200 dark:border-[#263347] rounded-xl p-5 shadow-sm transition-all hover:border-gray-300 dark:hover:border-slate-600 flex items-center justify-between"
             >
               <div>
                 <p className={`text-sm font-medium ${config.text}`}>
                   {stat.title}
                 </p>
-                <p className="text-3xl font-bold mt-2 text-gray-900 dark:text-white">
+                <p className="text-3xl font-bold mt-2 text-gray-900 dark:text-slate-100">
                   {stat.value}
                 </p>
               </div>
@@ -85,8 +85,8 @@ export default function AdminDashboard() {
       {/* Content Grid */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {/* Recent Tasks */}
-        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm">
-          <h2 className="font-semibold text-gray-900 dark:text-white mb-4">
+        <div className="bg-white dark:bg-[#0e1626] border border-gray-200 dark:border-[#263347] rounded-xl p-6 shadow-sm">
+          <h2 className="font-semibold text-gray-900 dark:text-slate-100 mb-4">
             Recent Tasks
           </h2>
 
@@ -98,10 +98,10 @@ export default function AdminDashboard() {
                 <div
                   key={task.id}
                   onClick={() => navigate({ to: `/admin/tasks/${task.id}` })}
-                  className="flex justify-between items-center p-3 rounded-lg border border-gray-100 dark:border-gray-800/60 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition cursor-pointer"
+                  className="flex justify-between items-center p-3 rounded-lg border border-gray-100 dark:border-[#263347]/70 bg-white dark:bg-[#0e1626] hover:bg-gray-50 dark:hover:bg-[#182232] transition cursor-pointer"
                 >
-                  <span className="font-medium text-sm text-gray-800 dark:text-gray-200">{task.title}</span>
-                  <span className="text-xs text-blue-500 font-medium">View details →</span>
+                  <span className="font-medium text-sm text-gray-800 dark:text-slate-200">{task.title}</span>
+                  <span className="text-xs text-blue-500 dark:text-blue-400 font-medium">View details →</span>
                 </div>
               ))
             )}
@@ -109,8 +109,8 @@ export default function AdminDashboard() {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm">
-          <h2 className="font-semibold text-gray-900 dark:text-white mb-4">
+        <div className="bg-white dark:bg-[#0e1626] border border-gray-200 dark:border-[#263347] rounded-xl p-6 shadow-sm">
+          <h2 className="font-semibold text-gray-900 dark:text-slate-100 mb-4">
             Quick Actions
           </h2>
 
@@ -126,7 +126,7 @@ export default function AdminDashboard() {
             <button
               type="button"
               onClick={() => navigate({ to: "/admin/users" })}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-medium text-sm rounded-lg transition cursor-pointer"
+              className="px-4 py-2 border border-gray-300 dark:border-[#263347] text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-[#182232] font-medium text-sm rounded-lg transition cursor-pointer"
             >
               Manage Users
             </button>
@@ -134,7 +134,7 @@ export default function AdminDashboard() {
             <button
               type="button"
               onClick={() => navigate({ to: "/admin/timeline" })}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-medium text-sm rounded-lg transition cursor-pointer"
+              className="px-4 py-2 border border-gray-300 dark:border-[#263347] text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-[#182232] font-medium text-sm rounded-lg transition cursor-pointer"
             >
               View Timeline
             </button>

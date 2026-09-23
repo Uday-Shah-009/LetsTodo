@@ -290,7 +290,7 @@ export default function CreateTaskModal({
                         maxLength: { value: 200, message: "Maximum 200 characters" },
                       })}
                       placeholder="Task title"
-                      className="w-full px-3 py-2 border rounded border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border rounded border-zinc-300 dark:border-[#263347] bg-white dark:bg-[#182232] text-zinc-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     {errors?.subtasks?.[index]?.title && (
                       <p className="text-red-500 text-sm">{errors.subtasks[index].title.message}</p>
@@ -305,7 +305,7 @@ export default function CreateTaskModal({
                       id={`subtasks.${index}.description`}
                       {...register(`subtasks.${index}.description`)}
                       placeholder="Task description"
-                      className="w-full px-3 py-2 border rounded border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border rounded border-zinc-300 dark:border-[#263347] bg-white dark:bg-[#182232] text-zinc-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
 
@@ -325,7 +325,7 @@ export default function CreateTaskModal({
                             val >= new Date().toISOString().split("T")[0] ||
                             "Date cannot be in the past",
                         })}
-                        className="w-full px-3 py-2 border rounded border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border rounded border-zinc-300 dark:border-[#263347] bg-white dark:bg-[#182232] text-zinc-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                       {errors?.subtasks?.[index]?.start_date && (
                         <p className="text-red-500 text-sm">{errors.subtasks[index].start_date.message || "Start date is required"}</p>
@@ -342,7 +342,7 @@ export default function CreateTaskModal({
                           required: "Start time is required",
                         })}
                         type="time"
-                        className="w-full px-3 py-2 border rounded border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border rounded border-zinc-300 dark:border-[#263347] bg-white dark:bg-[#182232] text-zinc-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                       {errors?.subtasks?.[index]?.start_time && (
                         <p className="text-red-500 text-sm">{errors.subtasks[index].start_time.message || "Start time is required"}</p>

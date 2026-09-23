@@ -23,10 +23,7 @@ export default function AddDepartmentPage() {
     },
   });
 
-  const {
-    data: departments = [],
-    isPending,
-  } = useGetDepartments();
+  const { data: departments = [], isPending } = useGetDepartments();
 
   const DepartmentMutate = useCreateDepartment();
   const updateDepartmentMutate = useUpdateDepartment();
@@ -48,7 +45,7 @@ export default function AddDepartmentPage() {
         onSuccess: () => {
           setEditTarget(null);
         },
-      }
+      },
     );
   };
 
@@ -67,17 +64,17 @@ export default function AddDepartmentPage() {
 
         <div
           className="
-            rounded-3xl
+            rounded-xl
             border
             border-slate-200
             bg-white
             p-8
             shadow-sm
-            dark:border-white/10
-            dark:bg-[#07152F]
+            dark:border-[#263347]
+            dark:bg-[#0e1626]
           "
         >
-          <h2 className="mb-6 text-xl font-semibold text-slate-900 dark:text-white">
+          <h2 className="mb-6 text-xl font-semibold text-slate-900 dark:text-slate-100">
             Add Department
           </h2>
 
@@ -102,7 +99,8 @@ export default function AddDepartmentPage() {
                   },
                   pattern: {
                     value: /^[a-zA-Z0-9\s-]+$/,
-                    message: "Only letters, numbers, spaces and hyphens allowed",
+                    message:
+                      "Only letters, numbers, spaces and hyphens allowed",
                   },
                 })}
                 className="
@@ -119,10 +117,11 @@ export default function AddDepartmentPage() {
                   focus:outline-none
                   focus:ring-2
                   focus:ring-blue-500/20
-                  dark:border-white/10
-                  dark:bg-[#0B1D3D]
-                  dark:text-white
-                  dark:placeholder:text-slate-500
+                  dark:border-[#263347]
+                  dark:bg-[#182232]
+                  dark:text-slate-100
+                  dark:placeholder:text-slate-400
+                  transition-all
                 "
               />
 
@@ -158,11 +157,11 @@ export default function AddDepartmentPage() {
           </form>
         </div>
 
-        <div className="mt-8 rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-[#07152F]">
-          <div className="border-b border-slate-200 p-6 dark:border-white/10">
+        <div className="mt-8 rounded-xl border border-slate-200 bg-white shadow-sm dark:border-[#263347] dark:bg-[#0e1626]">
+          <div className="border-b border-slate-200 p-6 dark:border-[#263347] dark:bg-[#182232] rounded-t-xl">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
                   Available Departments
                 </h2>
 
@@ -171,7 +170,7 @@ export default function AddDepartmentPage() {
                 </p>
               </div>
 
-              <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
+              <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 border dark:border-blue-800/40">
                 {departments.length} Departments
               </span>
             </div>
@@ -184,13 +183,13 @@ export default function AddDepartmentPage() {
                   key={index}
                   className="
                     animate-pulse
-                    rounded-2xl
+                    rounded-xl
                     border
                     border-slate-200
                     bg-slate-50
                     p-5
-                    dark:border-white/10
-                    dark:bg-[#0B1D3D]
+                    dark:border-[#263347]
+                    dark:bg-[#182232]
                   "
                 >
                   <div className="flex items-start justify-between">
@@ -202,7 +201,7 @@ export default function AddDepartmentPage() {
                     <div className="h-6 w-14 rounded bg-slate-200 dark:bg-slate-700" />
                   </div>
 
-                  <div className="mt-6 border-t border-slate-200 pt-4 dark:border-white/10">
+                  <div className="mt-6 border-t border-slate-200 pt-4 dark:border-[#263347]">
                     <div className="h-4 w-24 rounded bg-slate-200 dark:bg-slate-800" />
                     <div className="mt-2 h-8 w-12 rounded bg-slate-300 dark:bg-slate-700" />
                   </div>
@@ -210,45 +209,47 @@ export default function AddDepartmentPage() {
               ))}
             </div>
           ) : departments.length > 0 ? (
-            <div className="grid gap-4 p-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 p-6 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
               {departments.map((department) => (
                 <div
                   key={department.id}
                   className="
-                    rounded-2xl
+                    rounded-xl
                     border
                     border-slate-200
                     bg-slate-50
                     p-5
                     transition-all
                     hover:shadow-md
-                    dark:border-white/10
-                    dark:bg-[#0B1D3D]
+                    dark:border-[#263347]
+                    dark:bg-[#0e1626]
+                    hover:dark:bg-[#182232]
+                    flex flex-col justify-between h-full min-h-[145px]
                   "
                 >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1">
+                      <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100 break-words leading-snug">
                         {department.name}
                       </h3>
 
-                      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                      <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
                         Department
                       </p>
                     </div>
 
-                    <span className="rounded-lg bg-blue-100 px-2 py-1 text-xs font-medium text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
+                    <span className="shrink-0 rounded-lg bg-blue-100 px-2.5 py-1 text-xs font-medium text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 border dark:border-blue-800/40">
                       Active
                     </span>
                   </div>
 
-                  <div className="mt-4 border-t border-slate-200 pt-4 dark:border-white/10 flex items-center justify-between">
+                  <div className="mt-4 pt-4 border-t border-slate-200 dark:border-[#263347] flex items-center justify-between">
                     <div>
                       <p className="text-xs text-slate-500 dark:text-slate-400">
                         Total Persons
                       </p>
 
-                      <p className="mt-0.5 text-xl font-bold text-slate-900 dark:text-white">
+                      <p className="mt-0.5 text-lg font-bold text-slate-900 dark:text-slate-100">
                         {department.user_count ?? 0}
                       </p>
                     </div>
@@ -261,8 +262,9 @@ export default function AddDepartmentPage() {
                         rounded-xl px-3 py-1.5
                         text-xs font-semibold
                         text-blue-600 dark:text-blue-400
-                        bg-blue-50 dark:bg-blue-500/10
-                        hover:bg-blue-100 dark:hover:bg-blue-500/20
+                        bg-blue-50 dark:bg-blue-950/50
+                        hover:bg-blue-100 dark:hover:bg-blue-900/60
+                        border dark:border-blue-800/40
                         transition cursor-pointer
                       "
                     >

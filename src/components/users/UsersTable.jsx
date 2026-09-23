@@ -4,11 +4,11 @@ import {Settings2, Trash2 } from "lucide-react";
 
 export default function UsersTable({ users = [], onRemove }) {
   return (
-    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden shadow-sm">
+    <div className="bg-white dark:bg-[#0e1626] border border-gray-200 dark:border-[#263347] rounded-xl overflow-hidden shadow-sm">
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="border-b border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
-            <tr className="text-left font-semibold text-gray-700 dark:text-gray-300">
+          <thead className="border-b border-gray-200 dark:border-[#263347] bg-gray-50/80 dark:bg-[#182232]">
+            <tr className="text-left font-semibold text-gray-800 dark:text-slate-100">
               <th className="p-4">Name</th>
               <th className="p-4">Email</th>
               <th className="p-4">Role</th>
@@ -27,13 +27,13 @@ export default function UsersTable({ users = [], onRemove }) {
               users.map((user) => (
                 <tr
                   key={user.id}
-                  className="border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+                  className="border-b border-gray-200 dark:border-[#263347]/70 bg-white dark:bg-[#0e1626] hover:bg-gray-50 dark:hover:bg-[#182232] transition-colors"
                 >
-                  <td className="p-4 font-medium text-gray-900 dark:text-white">
+                  <td className="p-4 font-medium text-gray-900 dark:text-slate-100">
                     {user.name}
                   </td>
 
-                  <td className="p-4 text-gray-500 dark:text-gray-400">
+                  <td className="p-4 text-gray-600 dark:text-slate-300">
                     {user.email}
                   </td>
 

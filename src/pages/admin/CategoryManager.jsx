@@ -21,10 +21,7 @@ export default function CategoryManager() {
     },
   });
 
-  const {
-    data: categories = [],
-    isPending,
-  } = useGetCategories();
+  const { data: categories = [], isPending } = useGetCategories();
 
   const createCategoryMutate = useCreateCategory();
   const deleteCategoryMutate = useDeleteCategory();
@@ -73,17 +70,17 @@ export default function CategoryManager() {
         {/* Create Category Form */}
         <div
           className="
-            rounded-3xl
+            rounded-xl
             border
             border-slate-200
             bg-white
             p-8
             shadow-sm
-            dark:border-white/10
-            dark:bg-[#07152F]
+            dark:border-[#263347]
+            dark:bg-[#0e1626]
           "
         >
-          <h2 className="mb-6 text-xl font-semibold text-slate-900 dark:text-white">
+          <h2 className="mb-6 text-xl font-semibold text-slate-900 dark:text-slate-100">
             Add Category
           </h2>
 
@@ -121,10 +118,11 @@ export default function CategoryManager() {
                   focus:outline-none
                   focus:ring-2
                   focus:ring-blue-500/20
-                  dark:border-white/10
-                  dark:bg-[#0B1D3D]
-                  dark:text-white
-                  dark:placeholder:text-slate-500
+                  dark:border-[#263347]
+                  dark:bg-[#182232]
+                  dark:text-slate-100
+                  dark:placeholder:text-slate-400
+                  transition-all
                 "
               />
 
@@ -161,11 +159,11 @@ export default function CategoryManager() {
         </div>
 
         {/* Categories List */}
-        <div className="mt-8 rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-[#07152F]">
-          <div className="border-b border-slate-200 p-6 dark:border-white/10">
+        <div className="mt-8 rounded-xl border border-slate-200 bg-white shadow-sm dark:border-[#263347] dark:bg-[#0e1626]">
+          <div className="border-b border-slate-200 p-6 dark:border-[#263347] dark:bg-[#182232] rounded-t-xl">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
                   Available Categories
                 </h2>
 
@@ -174,7 +172,7 @@ export default function CategoryManager() {
                 </p>
               </div>
 
-              <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
+              <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 border dark:border-blue-800/40">
                 {categories.length} Categories
               </span>
             </div>
@@ -187,13 +185,13 @@ export default function CategoryManager() {
                   key={index}
                   className="
                     animate-pulse
-                    rounded-2xl
+                    rounded-xl
                     border
                     border-slate-200
                     bg-slate-50
                     p-5
-                    dark:border-white/10
-                    dark:bg-[#0B1D3D]
+                    dark:border-[#263347]
+                    dark:bg-[#182232]
                   "
                 >
                   <div className="flex items-start justify-between">
@@ -208,53 +206,60 @@ export default function CategoryManager() {
               ))}
             </div>
           ) : categories.length > 0 ? (
-            <div className="grid gap-4 p-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 p-6 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
               {categories.map((category) => (
                 <div
                   key={category.id}
                   className="
-                    rounded-2xl
+                    rounded-xl
                     border
                     border-slate-200
                     bg-slate-50
                     p-5
                     transition-all
                     hover:shadow-md
-                    dark:border-white/10
-                    dark:bg-[#0B1D3D]
+                    dark:border-[#263347]
+                    dark:bg-[#0e1626]
+                    hover:dark:bg-[#182232]
+                    flex flex-col justify-between h-full min-h-[145px]
                   "
                 >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1">
+                      <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100 break-words leading-snug">
                         {category.name}
                       </h3>
 
-                      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                      <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
                         Category
                       </p>
                     </div>
 
-                    <span className="rounded-lg bg-blue-100 px-2 py-1 text-xs font-medium text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
+                    <span className="shrink-0 rounded-lg bg-blue-100 px-2.5 py-1 text-xs font-medium text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 border dark:border-blue-800/40">
                       Active
                     </span>
                   </div>
 
-                  <div className="mt-4 border-t border-slate-200 pt-4 dark:border-white/10">
+                  <div className="mt-4 pt-4 border-t border-slate-200 dark:border-[#263347] flex items-center justify-between">
+                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                      Task Tag
+                    </span>
+
                     <button
                       type="button"
                       onClick={() => handleDeleteClick(category)}
                       className="
-                        flex items-center gap-2
-                        rounded-lg px-3 py-1.5
-                        text-sm font-medium
-                        text-red-500
-                        bg-red-50 dark:bg-red-500/10
-                        hover:bg-red-100 dark:hover:bg-red-500/20
-                        transition
+                        flex items-center gap-1.5
+                        rounded-xl px-3 py-1.5
+                        text-xs font-semibold
+                        text-red-600 dark:text-red-400
+                        bg-red-50 dark:bg-red-950/50
+                        hover:bg-red-100 dark:hover:bg-red-900/60
+                        border dark:border-red-800/40
+                        transition cursor-pointer
                       "
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-3.5 h-3.5" />
                       Delete
                     </button>
                   </div>

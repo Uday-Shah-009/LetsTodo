@@ -1,24 +1,10 @@
 import React from "react";
-import { createRoute } from "@tanstack/react-router";
+import { createRoute, lazyRouteComponent } from "@tanstack/react-router";
 import { rootRoute } from "./router";
 
 import AdminLayout from "../../layout/AdminLayout";
 import { requireAuth } from "./requireAuth";
 import { checkUserRole } from "./isAdmin";
-
-/* Admin Pages Statically Imported */
-import AdminDashboard from "../../pages/admin/AdminDashboard";
-import AdminTasks from "../../pages/admin/AdminTasks";
-import AdminTasksDetails from "../../pages/admin/AdminTasksDetails";
-import AdminTimeline from "../../pages/admin/AdminTimeline";
-import Users from "../../pages/admin/Users";
-import Settings from "../../pages/admin/Settings";
-import AdminAddTask from "../../pages/admin/AdminAddTasks";
-import TaskRequestsPage from "../../pages/admin/TaskCreationRequests";
-import AddDepartmentPage from "../../pages/admin/DepartmentManager";
-import ManageUserDepartment from "../../components/users/ManageUserDepartments";
-import CategoryManager from "../../pages/admin/CategoryManager";
-import ReviseTaskPage from "../../pages/ReviseTaskPage";
 
 /* Admin Parent Route */
 
@@ -33,7 +19,7 @@ export const adminLayoutRoute = createRoute({
 export const adminDashboardRoute = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/dashboard",
-  component: AdminDashboard,
+  component: lazyRouteComponent(() => import("../../pages/admin/AdminDashboard")),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -45,7 +31,7 @@ export const adminDashboardRoute = createRoute({
 export const adminTasksRoute = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/tasks",
-  component: AdminTasks,
+  component: lazyRouteComponent(() => import("../../pages/admin/AdminTasks")),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -55,18 +41,19 @@ export const adminTasksRoute = createRoute({
 export const adminAddTasksRoute = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/add-task",
-  component: AdminAddTask,
+  component: lazyRouteComponent(() => import("../../pages/admin/AdminAddTasks")),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
   },
 });
+
 /* Task Details */
 
 export const adminTaskDetailsRoute = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/tasks/$taskId",
-  component: AdminTasksDetails,
+  component: lazyRouteComponent(() => import("../../pages/admin/AdminTasksDetails")),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -76,7 +63,7 @@ export const adminTaskDetailsRoute = createRoute({
 export const adminTaskReviseRoute = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/tasks/$taskId/revise",
-  component: ReviseTaskPage,
+  component: lazyRouteComponent(() => import("../../pages/ReviseTaskPage")),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -88,7 +75,7 @@ export const adminTaskReviseRoute = createRoute({
 export const adminTimelineRoute = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/timeline",
-  component: AdminTimeline,
+  component: lazyRouteComponent(() => import("../../pages/admin/AdminTimeline")),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -100,7 +87,7 @@ export const adminTimelineRoute = createRoute({
 export const adminUsersRoute = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/users",
-  component: Users,
+  component: lazyRouteComponent(() => import("../../pages/admin/Users")),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -112,7 +99,7 @@ export const adminUsersRoute = createRoute({
 export const adminSettingsRoute = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/settings",
-  component: Settings,
+  component: lazyRouteComponent(() => import("../../pages/admin/Settings")),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -122,7 +109,7 @@ export const adminSettingsRoute = createRoute({
 export const adminTaskRequests = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/task-requests",
-  component: TaskRequestsPage,
+  component: lazyRouteComponent(() => import("../../pages/admin/TaskCreationRequests")),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -132,7 +119,7 @@ export const adminTaskRequests = createRoute({
 export const adminDepartmentManager = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/departments",
-  component: AddDepartmentPage,
+  component: lazyRouteComponent(() => import("../../pages/admin/DepartmentManager")),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -142,7 +129,7 @@ export const adminDepartmentManager = createRoute({
 export const adminUserDepartmentManager = createRoute({
   getParentRoute: () => adminUsersRoute,
   path: "$id/departments",
-  component: ManageUserDepartment,
+  component: lazyRouteComponent(() => import("../../components/users/ManageUserDepartments")),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
@@ -152,7 +139,7 @@ export const adminUserDepartmentManager = createRoute({
 export const adminCategoryManager = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/categories",
-  component: CategoryManager,
+  component: lazyRouteComponent(() => import("../../pages/admin/CategoryManager")),
   beforeLoad: () => {
     requireAuth();
     checkUserRole();
