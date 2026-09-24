@@ -18,6 +18,7 @@ export const GetAllTasks = async ({ status, page, pageSize, search, department_i
   const res = await axiosInstance.get("tasks", {
     params,
   });
+  console.log(res.data)
   return res.data;
 };
 

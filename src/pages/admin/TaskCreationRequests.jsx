@@ -139,7 +139,7 @@ export default function TaskRequestsPage() {
               shadow-sm
             "
           >
-            {/* TABLE HEADER */}
+
             <div
               className="
                 grid grid-cols-5 gap-4

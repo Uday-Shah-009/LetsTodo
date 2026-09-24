@@ -8,7 +8,19 @@ import { Menu, User, ChevronRight } from "lucide-react"
 import LoadingSpinner from "../components/ui/LoadingSpinner"
 
 export default function AdminLayout() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    const saved = localStorage.getItem("admin_sidebar_open");
+    if (saved !== null) return JSON.parse(saved);
+    return window.innerWidth >= 1024;
+  })
+
+  const handleSetSidebarOpen = (value) => {
+    setSidebarOpen((prev) => {
+      const nextState = typeof value === "function" ? value(prev) : value;
+      localStorage.setItem("admin_sidebar_open", JSON.stringify(nextState));
+      return nextState;
+    });
+  };
   const location = useLocation()
   const navigate = useNavigate()
   const user = useUser()
@@ -39,7 +51,7 @@ export default function AdminLayout() {
       {/* Sidebar */}
       <AdminSidebar
         sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
+        setSidebarOpen={handleSetSidebarOpen}
       />
 
       {/* Right Side */}
@@ -47,11 +59,12 @@ export default function AdminLayout() {
         {/* Navbar */}
         <header className="h-16 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex items-center justify-between px-4 md:px-6 shadow-xs">
           <div className="flex items-center gap-3">
-            {/* Mobile Menu */}
+            {/* Sidebar Toggle Button (Mobile + Desktop) */}
             <button
-              className="lg:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition cursor-pointer"
-              onClick={() => setSidebarOpen(true)}
-              aria-label="Open mobile menu"
+              className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition cursor-pointer flex items-center justify-center"
+              onClick={() => handleSetSidebarOpen((prev) => !prev)}
+              aria-label="Toggle menu"
+              title={sidebarOpen ? "Close sidebar" : "Open sidebar"}
             >
               <Menu className="w-5 h-5" />
             </button>

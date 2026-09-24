@@ -12,6 +12,7 @@ import {
   FolderTree,
   Settings,
   LogOut,
+  ChevronLeft,
 } from "lucide-react";
 
 export default function AdminSidebar({ sidebarOpen, setSidebarOpen }) {
@@ -47,16 +48,26 @@ export default function AdminSidebar({ sidebarOpen, setSidebarOpen }) {
       )}
 
       <aside
-        className={`fixed lg:static z-40 w-64 h-full bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 transform transition-transform duration-200 flex flex-col
-        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
-        lg:translate-x-0`}
+        className={`fixed lg:static z-40 h-full bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 transform transition-all duration-300 flex flex-col shrink-0 ${
+          sidebarOpen
+            ? "w-64 translate-x-0 border-r"
+            : "w-0 -translate-x-full lg:w-0 border-r-0 overflow-hidden"
+        }`}
       >
         {/* Header */}
-        <div className="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-800">
+        <div className="h-16 flex items-center justify-between px-6 border-b border-gray-200 dark:border-gray-800">
           <div className="flex items-center gap-2">
             <span className="text-xl font-extrabold italic text-blue-500">LETS</span>
             <span className="text-xl font-bold text-gray-900 dark:text-white">TODO</span>
           </div>
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(false)}
+            className="p-1.5 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-800 transition cursor-pointer"
+            title="Close sidebar"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
         </div>
 
         {/* Navigation */}
@@ -69,7 +80,11 @@ export default function AdminSidebar({ sidebarOpen, setSidebarOpen }) {
               <Link
                 key={item.name}
                 to={item.path}
-                onClick={() => setSidebarOpen(false)}
+                onClick={() => {
+                  if (window.innerWidth < 1024) {
+                    setSidebarOpen(false);
+                  }
+                }}
                 className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-colors ${
                   active
                     ? "bg-blue-600 text-white shadow-sm"
