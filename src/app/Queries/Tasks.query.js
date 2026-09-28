@@ -6,6 +6,7 @@ import {
   createTask,
   deleteTask,
   GetAllTasks,
+  GetIncompleteTasks,
   GetMyTasks,
   getTaskActivities,
   GetTaskbyId,
@@ -268,4 +269,13 @@ export const useDeleteTask = () => {
     },
   });
 };
+
+export const useGetIncompleteTasks = (options = {}) => {
+  return useQuery({
+    queryKey: ["GetIncompleteTasks"],
+    queryFn: GetIncompleteTasks,
+    ...options,
+  });
+};
+
 

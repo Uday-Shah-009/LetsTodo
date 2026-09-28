@@ -145,3 +145,13 @@ export const deleteTask = async (taskId) => {
   const res = await axiosInstance.delete(`tasks/${taskId}`);
   return res.data;
 };
+
+export const GetIncompleteTasks = async () => {
+  const res = await axiosInstance.get("incomplete-tasks", {
+    params: {
+      page_size: 100,
+    },
+  });
+  return res.data;
+};
+

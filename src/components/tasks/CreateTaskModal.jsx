@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { Plus, Trash2 } from "lucide-react";
-import { useCreateTask, useGetMyTasks, useGetAllTasks, useAddSubTaskToExistingTask } from "../../app/Queries/Tasks.query";
+import { useCreateTask, useAddSubTaskToExistingTask, useGetIncompleteTasks } from "../../app/Queries/Tasks.query";
 import { toast } from "react-toastify";
 import { useNavigate } from "@tanstack/react-router";
 
@@ -17,13 +17,12 @@ export default function CreateTaskModal({
 
   const navigate = useNavigate();
 
-  const myTasksQuery = useGetMyTasks({ enabled: !isAdmin });
-  const allTasksQuery = useGetAllTasks({ pageSize: 10, enabled: isAdmin });
+  const incompleteTasksQuery = useGetIncompleteTasks();
 
-  const existingTasks = isAdmin
-    ? (allTasksQuery.data?.items || [])
-    : (myTasksQuery.data?.items || []);
-  const isLoadingExisting = isAdmin ? allTasksQuery.isPending : myTasksQuery.isPending;
+  const existingTasks = Array.isArray(incompleteTasksQuery.data)
+    ? incompleteTasksQuery.data
+    : (incompleteTasksQuery.data?.items || []);
+  const isLoadingExisting = incompleteTasksQuery.isPending;
 
   const {
     register,
